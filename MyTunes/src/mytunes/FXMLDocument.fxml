@@ -1,14 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.FXMLDocumentController">
-    <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
+<AnchorPane id="AnchorPane" prefHeight="488.0" prefWidth="776.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.FXMLDocumentController">
+   <children>
+      <TableView layoutX="14.0" layoutY="115.0" prefHeight="320.0" prefWidth="146.0">
+        <columns>
+          <TableColumn prefWidth="95.0" text="Name" />
+            <TableColumn prefWidth="50.0" text="Column X" />
+        </columns>
+      </TableView>
+      <GridPane layoutX="72.0" layoutY="19.0" prefHeight="74.0" prefWidth="163.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Slider prefHeight="15.0" prefWidth="163.0" GridPane.rowIndex="1" />
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button id="PLAY" alignment="CENTER" mnemonicParsing="false" prefHeight="42.0" prefWidth="46.0" GridPane.columnIndex="1">
+                     <graphic>
+                        <HBox prefHeight="42.0" prefWidth="41.0">
+                           <children>
+                              <ImageView fitHeight="39.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../play.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </graphic>
+                  </Button>
+                  <Button id="PREV" mnemonicParsing="false" prefHeight="42.0" prefWidth="46.0">
+                     <graphic>
+                        <HBox prefHeight="42.0" prefWidth="41.0">
+                           <children>
+                              <ImageView fitHeight="39.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../prev.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </graphic>
+                  </Button>
+                  <Button id="NEXT" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="42.0" prefWidth="46.0" GridPane.columnIndex="2">
+                     <graphic>
+                        <HBox prefHeight="42.0" prefWidth="41.0">
+                           <children>
+                              <ImageView fitHeight="39.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../next.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </graphic>
+                  </Button>
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+      <TableView layoutX="262.0" layoutY="115.0" prefHeight="320.0" prefWidth="163.0">
+        <columns>
+          <TableColumn prefWidth="96.0" text="Name" />
+            <TableColumn prefWidth="75.0" text="Duration" />
+        </columns>
+      </TableView>
+      <TableView layoutX="510.0" layoutY="116.0" prefHeight="320.0" prefWidth="248.0">
+        <columns>
+          <TableColumn prefWidth="162.0" text="All songs" />
+        </columns>
+      </TableView>
+      <Button layoutX="14.0" layoutY="445.0" mnemonicParsing="false" text="New" />
+      <Button layoutX="65.0" layoutY="445.0" mnemonicParsing="false" text="Edit" />
+      <Button layoutX="111.0" layoutY="445.0" mnemonicParsing="false" text="Delete" />
+      <Button layoutX="446.0" layoutY="162.0" mnemonicParsing="false" text="&lt;&lt; Add" />
+      <Button layoutX="193.0" layoutY="445.0" mnemonicParsing="false" text="Up" />
+      <Button layoutX="235.0" layoutY="445.0" mnemonicParsing="false" text="Down" />
+      <Button layoutX="292.0" layoutY="445.0" mnemonicParsing="false" text="Delete" />
+      <Button layoutX="659.0" layoutY="445.0" mnemonicParsing="false" text="Edit" />
+      <Button layoutX="707.0" layoutY="445.0" mnemonicParsing="false" text="Delete" />
+      <MenuButton layoutX="596.0" layoutY="445.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="New">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
+      <Slider layoutX="295.0" layoutY="64.0" prefHeight="14.0" prefWidth="234.0" />
+      <Label layoutX="339.0" layoutY="47.0" text="Please select a song to play" />
+      <Label layoutX="379.0" layoutY="19.0" text="Now playing" />
+      <GridPane layoutX="368.0" layoutY="78.0" prefHeight="30.0" prefWidth="88.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="00:00" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label text="00:00" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="/" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+      <TextField layoutX="529.0" layoutY="23.0" promptText="Search..." />
+      <Button layoutX="686.0" layoutY="23.0" mnemonicParsing="false" text="Search!!!!!!" />
+   </children>
 </AnchorPane>
