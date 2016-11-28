@@ -12,6 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
+//---------------------
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.*;
 /**
  *
  * @author Desmoswal
@@ -19,14 +23,20 @@ import javafx.scene.control.Label;
 public class FXMLDocumentController implements Initializable
 {
     
-    @FXML
-    private Label label;
+    //@FXML
+    //private Label label;
     
     @FXML
     private void handleButtonAction(ActionEvent event)
     {
         System.out.println("You clicked me!");
-        label.setText("Hello World!");
+        
+        
+        String uriString = new File("D:\\GitHub\\School\\CompulsoryAssignment_MyTunes\\MyTunes\\sound1.mp3").toURI().toString();
+        MediaPlayer player = new MediaPlayer( new Media(uriString));
+        player.play();
+        
+        
     }
     
     @Override
