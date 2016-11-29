@@ -105,7 +105,7 @@ public class FXMLDocumentController implements Initializable
         MediaPlayer player = new MediaPlayer(new Media(uriString));
         player.play();
 
-        //-------------
+        //-----Reading Metadata--------
         /*
       Media m = new Media(uriString);
       String title = (String)m.getMetadata().get("title");
