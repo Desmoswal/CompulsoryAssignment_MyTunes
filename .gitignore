@@ -4,3 +4,11 @@
 /MyTunes/dist/
 /MyTunes/nbdist/
 /MyTunes/.nb-gradle/
+*.html
+MyTunes/dist/MyTunes.html
+*.jar
+MyTunes/dist/MyTunes.jnlp
+*.xml
+MyTunes/nbproject/jfx-impl_backup_2.xml
+*.xml
+MyTunes/nbproject/UPDATED.TXT
