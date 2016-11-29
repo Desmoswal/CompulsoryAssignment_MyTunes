@@ -22,6 +22,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -100,8 +102,12 @@ public class FXMLDocumentController implements Initializable
     private void handleButtonAction(ActionEvent event)
     {
         System.out.println("You clicked me!");
+        
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current relative path is: " + s);
 
-        String uriString = new File("D:\\GitHub\\School\\CompulsoryAssignment_MyTunes\\MyTunes\\sound1.mp3").toURI().toString();
+        String uriString = new File(s + "\\sound1.mp3").toURI().toString();
         MediaPlayer player = new MediaPlayer(new Media(uriString));
         player.play();
 
