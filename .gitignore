@@ -1,7 +1,6 @@
 /MyTunes/nbproject/private/
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+/MyTunes/build/
+/MyTunes/nbbuild/
+/MyTunes/dist/
+/MyTunes/nbdist/
+/MyTunes/.nb-gradle/
