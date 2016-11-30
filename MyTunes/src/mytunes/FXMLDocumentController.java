@@ -25,6 +25,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -40,6 +41,8 @@ import javafx.stage.Stage;
 public class FXMLDocumentController implements Initializable
 {
 
+    @FXML
+    private Label labelcount;
     @FXML
     private TableColumn<?, ?> colPlaylistsTitle;
     @FXML
@@ -157,7 +160,10 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
-
+        
+        labelcount.textProperty().bind(
+                player.currentTimeProperty().asString());
+        
     }
 
     @Override
