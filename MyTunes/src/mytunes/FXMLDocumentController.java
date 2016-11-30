@@ -25,6 +25,8 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -94,7 +96,7 @@ public class FXMLDocumentController implements Initializable
     private Button btnSearch;
     @FXML
     private ComboBox<?> menuNew;
-    
+
     Stage stage;
 
     //@FXML
@@ -103,7 +105,7 @@ public class FXMLDocumentController implements Initializable
     private void handleButtonAction(ActionEvent event)
     {
         System.out.println("You clicked me!");
-        
+
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current relative path is: " + s);
@@ -113,21 +115,39 @@ public class FXMLDocumentController implements Initializable
         player.play();
 
         //-----Reading Metadata--------
+        /**
+         * First it adds a listener to the media
+         * then it gets every single detail of
+         * the media file.
+         * You can choose to get every data one by one,
+         * using title, album, artist.. etc. 
+         * OR using fullMetadata which gets everything.
+         * fullMetadata has raw metadata, look out for that.
+         */
+        Media m = new Media(uriString);
+        Media media = new Media(uriString);
+        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> 
+                {
+                    // code to process metadata attribute change.
+                    String title = (String) m.getMetadata().get("title");
+                    String album = (String) m.getMetadata().get("album");
+                    String artist = (String) m.getMetadata().get("artist");
+                    String fullMetadata = (String)m.getMetadata().toString();
+                    
+                    //Actually have no clue what this supposed to be.. 
+                    //Maybe for every mediafile in the folder ??
+                    //ObservableList<String> medialist = FXCollections.observableArrayList();
+                    //     medialist.addAll(medialist);
+                    //System.out.println(medialist);
+                    
+                    System.out.println(title);
+                    System.out.println(album);
+                    System.out.println(artist);
+                    System.out.println(fullMetadata);
+        });
         
-      Media m = new Media(uriString);
-      /*String title = (String)m.getMetadata().get("title");
-      String album = (String)m.getMetadata().get("album");
-      String artist = (String)m.getMetadata().get("artist");
-      String asd = (String)m.getMetadata().toString();
-      ObservableList<String> medialist = FXCollections.observableArrayList();
-              medialist.addAll(medialist);
-        System.out.println(medialist);
-          System.out.println(title);
-          System.out.println(album);
-          System.out.println(artist);
-          System.out.println(asd);*/
-        //}
-        File folder = new File("D:/GitHub/School/CompulsoryAssignment_MyTunes/MyTunes/");
+        //Prints out the files in the folder
+        File folder = new File(s);
         File[] listOfFiles = folder.listFiles();
 
         for (File file : listOfFiles)
@@ -137,25 +157,7 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
-        
-        Media media = new Media(uriString);
-        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> {
-        // code to process metadata attribute change.
-        //String title = (String)m.getMetadata().get("title");
-      //String album = (String)m.getMetadata().get("album");
-      //String artist = (String)m.getMetadata().get("artist");
-      String asd = (String)m.getMetadata().toString();
-      //ObservableList<String> medialist = FXCollections.observableArrayList();
-        //      medialist.addAll(medialist);
-        //System.out.println(medialist);
-          //System.out.println(title);
-          //System.out.println(album);
-          //System.out.println(artist);
-          System.out.println(asd);
-        });
-        MediaPlayer player1 = new MediaPlayer(media);
-        
-        
+
     }
 
     @Override
@@ -163,11 +165,12 @@ public class FXMLDocumentController implements Initializable
     {
         // TODO
     }
-    
 
     @FXML
     private void handleEditSongButtonAction(ActionEvent event)
     {
+        //Filechooser with extension filters for selecting music
+        //Maybe later folders too
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
@@ -175,25 +178,29 @@ public class FXMLDocumentController implements Initializable
         fileChooser.setTitle("Open Music File");
         fileChooser.showOpenDialog(stage);
     }
-    
-    public void handleSavePlaylistAction(ActionEvent e){
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save Playlist");
-            
-            fileChooser.getExtensionFilters().addAll(
+
+    public void handleSavePlaylistAction(ActionEvent e)
+    {
+        //Saves a .playlist file, supposed to save every detail of the playlists
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Playlist");
+
+        fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Playlist Files", "*.playlist"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
-            
-            //System.out.println(playlist.getId());
-            File file = fileChooser.showSaveDialog(stage);
-            
-            if (file != null) {
-                try {
-                    file.createNewFile();
-                } 
-                catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
+
+        //System.out.println(playlist.getId());
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null)
+        {
+            try
+            {
+                file.createNewFile();
+            } catch (IOException ex)
+            {
+                System.out.println(ex.getMessage());
             }
         }
+    }
 }
