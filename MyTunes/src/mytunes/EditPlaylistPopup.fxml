@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="250.0" maxWidth="250.0" prefHeight="250.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.EditPlaylistPopupController">
+   <children>
+      <Label layoutX="95.0" layoutY="44.0" text="Edit playlist" />
+      <Label layoutX="27.0" layoutY="88.0" text="Name:" />
+      <Button fx:id="btnEditPlaylistSave" layoutX="99.0" layoutY="166.0" mnemonicParsing="false" onAction="#savePlaylist" text="Save" />
+      <TextField layoutX="77.0" layoutY="84.0" promptText="Name of playlist" />
+   </children>
+</AnchorPane>

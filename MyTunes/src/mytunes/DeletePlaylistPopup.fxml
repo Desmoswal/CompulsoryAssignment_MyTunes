@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" maxHeight="250.0" maxWidth="250.0" minHeight="250.0" minWidth="250.0" prefHeight="250.0" prefWidth="250.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60" fx:controller="mytunes.DeletePlaylistPopupController">
+   <children>
+      <Label layoutX="7.0" layoutY="48.0" maxWidth="236.0" text="You are about to delete the selected playlist. Are you sure about that?" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnDeletePlaylistYes" layoutX="52.0" layoutY="125.0" mnemonicParsing="false" onAction="#deletePlaylist" text="Hell yeah!" />
+      <Button fx:id="btnDeletePlaylistNo" layoutX="154.0" layoutY="125.0" mnemonicParsing="false" onAction="#closeWindow" text="Nah" />
+   </children>
+</AnchorPane>
