@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -112,9 +113,9 @@ public class FXMLDocumentController implements Initializable
         player.play();
 
         //-----Reading Metadata--------
-        /*
+        
       Media m = new Media(uriString);
-      String title = (String)m.getMetadata().get("title");
+      /*String title = (String)m.getMetadata().get("title");
       String album = (String)m.getMetadata().get("album");
       String artist = (String)m.getMetadata().get("artist");
       String asd = (String)m.getMetadata().toString();
@@ -124,8 +125,8 @@ public class FXMLDocumentController implements Initializable
           System.out.println(title);
           System.out.println(album);
           System.out.println(artist);
-          System.out.println(asd);
-        //}*/
+          System.out.println(asd);*/
+        //}
         File folder = new File("D:/GitHub/School/CompulsoryAssignment_MyTunes/MyTunes/");
         File[] listOfFiles = folder.listFiles();
 
@@ -136,6 +137,23 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
+        
+        Media media = new Media(uriString);
+        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> {
+        // code to process metadata attribute change.
+        //String title = (String)m.getMetadata().get("title");
+      //String album = (String)m.getMetadata().get("album");
+      //String artist = (String)m.getMetadata().get("artist");
+      String asd = (String)m.getMetadata().toString();
+      //ObservableList<String> medialist = FXCollections.observableArrayList();
+        //      medialist.addAll(medialist);
+        //System.out.println(medialist);
+          //System.out.println(title);
+          //System.out.println(album);
+          //System.out.println(artist);
+          System.out.println(asd);
+        });
+        MediaPlayer player1 = new MediaPlayer(media);
         
         
     }
@@ -158,18 +176,24 @@ public class FXMLDocumentController implements Initializable
         fileChooser.showOpenDialog(stage);
     }
     
-    public void handleSavePlaylistAction(ActionEvent e) {
+    public void handleSavePlaylistAction(ActionEvent e){
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Playlist");
+            
+            fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Playlist Files", "*.playlist"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+            
             //System.out.println(playlist.getId());
             File file = fileChooser.showSaveDialog(stage);
-/*            if (file != null) {
+            
+            if (file != null) {
                 try {
-                    ImageIO.write(SwingFXUtils.fromFXImage(pic.getImage(),
-                        null), "png", file);
-                } catch (IOException ex) {
+                    file.createNewFile();
+                } 
+                catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
-            }*/
+            }
         }
 }
