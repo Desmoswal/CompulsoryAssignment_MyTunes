@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.control.MenuButton;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -112,8 +113,16 @@ public class FXMLDocumentController implements Initializable
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current relative path is: " + s);
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        fileChooser.setTitle("Open Music File");
 
-        String uriString = new File(s + "\\sound1.mp3").toURI().toString();
+        File files = fileChooser.showOpenDialog(stage);
+        String uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
+        System.out.println(uriString);
         MediaPlayer player = new MediaPlayer(new Media(uriString));
         player.play();
 
@@ -182,6 +191,7 @@ public class FXMLDocumentController implements Initializable
                 new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
         fileChooser.setTitle("Open Music File");
+        
         fileChooser.showOpenDialog(stage);
     }
 
