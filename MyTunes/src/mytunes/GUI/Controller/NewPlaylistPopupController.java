@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mytunes;
+package mytunes.GUI.Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,7 +33,7 @@ public class NewPlaylistPopupController implements Initializable {
 
     @FXML
     private void createPlaylist(ActionEvent event) {
-    sdfsdfdfd    
+        
     }
     
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mytunes;
+package mytunes.GUI.Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,12 +17,10 @@ import javafx.scene.control.Button;
  *
  * @author Kristof
  */
-public class DeletePlaylistPopupController implements Initializable {
+public class EditPlaylistPopupController implements Initializable {
 
     @FXML
-    private Button btnDeletePlaylistYes;
-    @FXML
-    private Button btnDeletePlaylistNo;
+    private Button btnEditPlaylistSave;
 
     /**
      * Initializes the controller class.
@@ -33,11 +31,7 @@ public class DeletePlaylistPopupController implements Initializable {
     }    
 
     @FXML
-    private void deletePlaylist(ActionEvent event) {
-    }
-
-    @FXML
-    private void closeWindow(ActionEvent event) {
+    private void savePlaylist(ActionEvent event) {
     }
     
 }

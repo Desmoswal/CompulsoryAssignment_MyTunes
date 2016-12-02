@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mytunes;
+package mytunes.BLL;
 
 import java.util.ArrayList;
 
@@ -14,6 +14,6 @@ import java.util.ArrayList;
 public class Playlist {
     private String name;
     private ArrayList<String> songs;
-    private
+ 
     
 }
