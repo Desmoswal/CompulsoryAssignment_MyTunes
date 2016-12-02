@@ -14,6 +14,23 @@ import java.util.ArrayList;
 public class Playlist {
     private String name;
     private ArrayList<String> songs;
+
+    public Playlist(String name, ArrayList<String> songs)
+    {
+        this.name = name;
+        this.songs = songs;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public ArrayList<String> getSongs()
+    {
+        return songs;
+    }
  
+    
     
 }

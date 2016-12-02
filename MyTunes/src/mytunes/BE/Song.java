@@ -15,8 +15,34 @@ public class Song {
     private String title;
     private String time;
 
-    public Song(String path) {
+    public Song(String path, String artist, String title, String time)
+    {
         this.path = path;
+        this.artist = artist;
+        this.title = title;
+        this.time = time;
+    }
+
+    
+
+    public String getPath()
+    {
+        return path;
+    }
+
+    public String getArtist()
+    {
+        return artist;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public String getTime()
+    {
+        return time;
     }
     
     
