@@ -7,17 +7,9 @@ package mytunes.BLL;
 
 /**
  *
- * @author Kristof
+ * @author Desmoswal
  */
-public class Song {
-    private String path;
-    private String artist;
-    private String title;
-    private String time;
-
-    public Song(String path) {
-        this.path = path;
-    }
-    
+public class FileManager
+{
     
 }

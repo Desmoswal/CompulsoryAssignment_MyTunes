@@ -3,17 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mytunes.BLL;
-
-import java.util.ArrayList;
+package mytunes.BE;
 
 /**
  *
  * @author Kristof
  */
-public class Playlist {
-    private String name;
-    private ArrayList<String> songs;
- 
+public class Song {
+    private String path;
+    private String artist;
+    private String title;
+    private String time;
+
+    public Song(String path) {
+        this.path = path;
+    }
+    
     
 }
