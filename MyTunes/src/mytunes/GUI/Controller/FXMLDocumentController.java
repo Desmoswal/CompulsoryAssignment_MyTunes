@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -36,6 +38,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import mytunes.BE.*;
 
 /**
@@ -63,17 +66,17 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private Button btnNext;
     @FXML
-    private TableView<?> tblCurPlaylist;
+    private TableView<Library> tblCurPlaylist;
     @FXML
     private TableColumn<?, ?> colCurPlaylistTitle;
     @FXML
     private TableColumn<?, ?> colCurPlaylistTime;
     @FXML
-    private TableView<String> tblAllSongs;
+    private TableView<Song> tblAllSongs;
     @FXML
-    private TableColumn<Library, String> colAllSongsArtist;
+    private TableColumn<Song, String> colAllSongsArtist;
     @FXML
-    private TableColumn<Library, String> colAllSongsTitle;
+    private TableColumn<Song, String> colAllSongsTitle;
     @FXML
     private TableColumn<Song, String> colAllSongsGenre;
     @FXML
@@ -102,8 +105,6 @@ public class FXMLDocumentController implements Initializable
     private TextField txtSearch;
     @FXML
     private Button btnSearch;
-    @FXML
-    private ComboBox<?> menuNew;
     @FXML
     private MenuItem itemFolder;
     @FXML
@@ -185,9 +186,16 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
-        
-        labelcount.textProperty().bind(
-                player.currentTimeProperty().asString());
+        /*player.currentTimeProperty().addListener(new ChangeListener<Duration>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue)
+            {
+                double s = (long)((Duration)observable.getValue()).toMillis();
+                labelcount.setText(String.format("%d:%02d:%02d", s / 3600, (s % 3600) / 60, (s % 60)));
+            }
+        });
+       // */
         
     }
 
@@ -240,10 +248,14 @@ public class FXMLDocumentController implements Initializable
     @FXML
     public void fillLibTable() {
         ObservableList<Song> songlist = FXCollections.observableArrayList(lib.getSongList());
-        for (Song song : songlist) {
+        //ObservableList<Song> songlist = FXCollections.observableArrayList() ;
+        //tblAllSongs.setItems();
+        
             colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
             colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
-        }
+            tblAllSongs.setItems(songlist);
+            
+    
             
             //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
             
