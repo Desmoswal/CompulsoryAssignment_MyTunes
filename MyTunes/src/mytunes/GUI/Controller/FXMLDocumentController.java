@@ -32,8 +32,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import mytunes.BE.*;
 
 /**
  *
@@ -41,7 +44,8 @@ import javafx.stage.Stage;
  */
 public class FXMLDocumentController implements Initializable
 {
-
+    private Library lib = new Library();
+    
     @FXML
     private Label labelcount;
     @FXML
@@ -67,13 +71,13 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private TableView<String> tblAllSongs;
     @FXML
-    private TableColumn<?, ?> colAllSongsArtist;
+    private TableColumn<Library, String> colAllSongsArtist;
     @FXML
-    private TableColumn<?, ?> colAllSongsTitle;
+    private TableColumn<Library, String> colAllSongsTitle;
     @FXML
-    private TableColumn<?, ?> colAllSongsGenre;
+    private TableColumn<Song, String> colAllSongsGenre;
     @FXML
-    private TableColumn<?, ?> colAllSongsTime;
+    private TableColumn<Song, String> colAllSongsTime;
     @FXML
     private Button btnNewPlaylist;
     @FXML
@@ -100,11 +104,23 @@ public class FXMLDocumentController implements Initializable
     private Button btnSearch;
     @FXML
     private ComboBox<?> menuNew;
+    @FXML
+    private MenuItem itemFolder;
+    @FXML
+    private MenuItem itemFile;
 
     Stage stage;
 
-    //@FXML
-    //private Label label;
+    @FXML
+    private void openFolder(ActionEvent event)
+    {
+    
+    }
+    @FXML
+    private void openFile(ActionEvent event)
+    {
+    
+    }
     @FXML
     private void handleButtonAction(ActionEvent event)
     {
@@ -178,7 +194,8 @@ public class FXMLDocumentController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        // TODO
+       
+       fillLibTable();
     }
 
     @FXML
@@ -218,5 +235,18 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(ex.getMessage());
             }
         }
+    }
+    
+    @FXML
+    public void fillLibTable() {
+        ObservableList<Song> songlist = FXCollections.observableArrayList(lib.getSongList());
+        for (Song song : songlist) {
+            colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
+            colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
+        }
+            
+            //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
+            
+        
     }
 }

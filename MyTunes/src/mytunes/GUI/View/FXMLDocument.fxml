@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="488.0" prefWidth="776.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="488.0" prefWidth="776.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.FXMLDocumentController">
    <children>
       <TableView layoutX="14.0" layoutY="132.0" prefHeight="303.0" prefWidth="204.0" AnchorPane.rightAnchor="558.0">
         <columns>
@@ -27,7 +15,7 @@
             <TableColumn fx:id="colPlaylistsTime" prefWidth="65.0" text="Time" />
         </columns>
       </TableView>
-      <GridPane layoutX="30.0" layoutY="19.0" prefHeight="74.0" prefWidth="163.0">
+      <GridPane layoutX="30.0" layoutY="19.0" prefHeight="74.0" prefWidth="204.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -37,7 +25,7 @@
         </rowConstraints>
          <children>
             <Slider fx:id="slideVol" prefHeight="15.0" prefWidth="163.0" GridPane.rowIndex="1" />
-            <GridPane>
+            <GridPane prefHeight="37.0" prefWidth="155.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -47,45 +35,36 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button id="PLAY" fx:id="btnPlay" alignment="CENTER" mnemonicParsing="false" prefHeight="42.0" prefWidth="46.0" GridPane.columnIndex="1">
+                  <Button id="PLAY" fx:id="btnPlay" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="70.0" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                      <graphic>
-                        <HBox prefHeight="42.0" prefWidth="41.0">
-                           <children>
-                              <ImageView fitHeight="39.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../play.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                     </graphic>
+                        <ImageView fitHeight="63.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="http://kivulallo.ddns.net/assignment/play.png" />
+                             </image>
+                        </ImageView>
+                    </graphic>
                   </Button>
-                  <Button id="PREV" fx:id="btnPrev" mnemonicParsing="false" prefHeight="42.0" prefWidth="46.0">
-                     <graphic>
-                        <HBox prefHeight="42.0" prefWidth="41.0">
-                           <children>
-                              <ImageView fitHeight="39.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../prev.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                     </graphic>
-                  </Button>
-                  <Button id="NEXT" fx:id="btnNext" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="42.0" prefWidth="46.0" GridPane.columnIndex="2">
-                     <graphic>
-                        <HBox prefHeight="42.0" prefWidth="41.0">
-                           <children>
-                              <ImageView fitHeight="39.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../next.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                     </graphic>
-                  </Button>
+                  <Button id="PREV" fx:id="btnPrev" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="70.0" GridPane.columnIndex="0">
+                      <graphic>
+                        <ImageView fitHeight="63.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="http://kivulallo.ddns.net/assignment/prev.png" />
+                             </image>
+                        </ImageView>
+                    </graphic>
+                    </Button>
+                  <Button id="NEXT" fx:id="btnNext" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="70.0" GridPane.columnIndex="2">
+                    <graphic>
+                        <ImageView fitHeight="63.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="http://kivulallo.ddns.net/assignment/next.png" />
+                             </image>
+                        </ImageView>
+                    </graphic>
+                    </Button>
                </children>
             </GridPane>
          </children>
@@ -148,11 +127,10 @@
             <Font name="System Bold" size="19.0" />
          </font>
       </Label>
-      <ComboBox fx:id="menuNew" layoutX="563.0" layoutY="445.0" prefHeight="25.0" prefWidth="81.0" promptText="New..." />
-      <MenuButton fx:id="menuButton" layoutX="436.0" layoutY="445.0" mnemonicParsing="false" text="MenuButton">
+      <MenuButton fx:id="menuButton" layoutX="510.0" layoutY="445.0" mnemonicParsing="false" text="New...">
         <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
+          <MenuItem fx:id="itemFolder" mnemonicParsing="false" onAction="#openFolder" text="Folder" />
+          <MenuItem fx:id="itemFile" mnemonicParsing="false" onAction="#openFile" text="File" />
         </items>
       </MenuButton>
    </children>
