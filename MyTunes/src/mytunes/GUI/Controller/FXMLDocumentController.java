@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -25,22 +24,14 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import mytunes.BE.*;
 import mytunes.BLL.SongManager;
 
@@ -50,10 +41,7 @@ import mytunes.BLL.SongManager;
  */
 public class FXMLDocumentController implements Initializable
 {
-    private SongLibrary lib = new SongLibrary();
-    private String[] metaData = new String[2];
     
-    SongManager manager = new SongManager();
     
     @FXML
     private Label labelcount;
@@ -117,6 +105,10 @@ public class FXMLDocumentController implements Initializable
     private MenuItem itemFile;
 
     Stage stage;
+    
+    private SongLibrary lib = new SongLibrary();
+    
+    SongManager manager = new SongManager();
 
     @FXML
     private void openFolder(ActionEvent event)
@@ -126,81 +118,8 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private void openFile(ActionEvent event)
     {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        fileChooser.setTitle("Open Music File");
-
-        File files = fileChooser.showOpenDialog(stage);
-        String uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
-        System.out.println(uriString);
-        
-        Media m = new Media(uriString);
-        Media media = new Media(uriString);
-        media.getMetadata().get("artist");
-        media.getMetadata().addListener((MapChangeListener<String, Object>) change ->  
-                {
-                    // code to process metadata attribute change.
-                    String title = (String) m.getMetadata().get("title");
-                    String album = (String) m.getMetadata().get("album");
-                    String artist = (String) m.getMetadata().get("artist");
-                    String fullMetadata = (String)m.getMetadata().toString();
-                    
-                    metaData[0] = artist;
-                    metaData[1] = title;
-                    //Actually have no clue what this supposed to be.. 
-                    //Maybe for every mediafile in the folder ??
-                    //ObservableList<String> medialist = FXCollections.observableArrayList();
-                    //     medialist.addAll(medialist);
-                    //System.out.println(medialist);
-                    
-//                    System.out.println(title);
-//                    System.out.println(album);
-//                    System.out.println(artist);
-//                    System.out.println(fullMetadata);
-        });
-        
-        lib.addSong(new Song(files.getPath(), "anyád", "picsája","",""));
+    
     }
-    
-/*    private void readMetaData(File file) {
-        
-        //-----Reading Metadata--------
-        /**
-         * First it adds a listener to the media
-         * then it gets every single detail of
-         * the media file.
-         * You can choose to get every data one by one,
-         * using title, album, artist.. etc. 
-         * OR using fullMetadata which gets everything.
-         * fullMetadata has raw metadata, look out for that.
-         
-        Media m = new Media(file.toURI().toString());
-        Media media = new Media(file.toURI().toString());
-        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> 
-                {
-                    // code to process metadata attribute change.
-                    String title = (String) m.getMetadata().get("title");
-                    String album = (String) m.getMetadata().get("album");
-                    String artist = (String) m.getMetadata().get("artist");
-                    String fullMetadata = (String)m.getMetadata().toString();
-                    
-                    metaData[0] = artist;
-                    metaData[1] = title;
-                    //Actually have no clue what this supposed to be.. 
-                    //Maybe for every mediafile in the folder ??
-                    //ObservableList<String> medialist = FXCollections.observableArrayList();
-                    //     medialist.addAll(medialist);
-                    //System.out.println(medialist);
-                    
-//                    System.out.println(title);
-//                    System.out.println(album);
-//                    System.out.println(artist);
-//                    System.out.println(fullMetadata);
-        });
-    }*/
-    
     @FXML
     private void handleButtonAction(ActionEvent event)
     {
@@ -210,10 +129,49 @@ public class FXMLDocumentController implements Initializable
         String s = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current relative path is: " + s);
         
-//        MediaPlayer player = new MediaPlayer(new Media(uriString));
-//        player.play();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        fileChooser.setTitle("Open Music File");
 
-        
+        File files = fileChooser.showOpenDialog(stage);
+        String uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
+        System.out.println(uriString);
+        MediaPlayer player = new MediaPlayer(new Media(uriString));
+        player.play();
+
+        //-----Reading Metadata--------
+        /**
+         * First it adds a listener to the media
+         * then it gets every single detail of
+         * the media file.
+         * You can choose to get every data one by one,
+         * using title, album, artist.. etc. 
+         * OR using fullMetadata which gets everything.
+         * fullMetadata has raw metadata, look out for that.
+         */
+        Media m = new Media(uriString);
+        Media media = new Media(uriString);
+        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> 
+                {
+                    // code to process metadata attribute change.
+                    String title = (String) m.getMetadata().get("title");
+                    String album = (String) m.getMetadata().get("album");
+                    String artist = (String) m.getMetadata().get("artist");
+                    String fullMetadata = (String)m.getMetadata().toString();
+                    
+                    //Actually have no clue what this supposed to be.. 
+                    //Maybe for every mediafile in the folder ??
+                    //ObservableList<String> medialist = FXCollections.observableArrayList();
+                    //     medialist.addAll(medialist);
+                    //System.out.println(medialist);
+                    
+                    System.out.println(title);
+                    System.out.println(album);
+                    System.out.println(artist);
+                    System.out.println(fullMetadata);
+        });
         
         //Prints out the files in the folder
         File folder = new File(s);
@@ -226,17 +184,6 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
-        /*player.currentTimeProperty().addListener(new ChangeListener<Duration>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue)
-            {
-                double s = (long)((Duration)observable.getValue()).toMillis();
-                labelcount.setText(String.format("%d:%02d:%02d", s / 3600, (s % 3600) / 60, (s % 60)));
-            }
-        });
-       // */
-        
     }
 
     @Override
@@ -298,8 +245,8 @@ public class FXMLDocumentController implements Initializable
     
             
             //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
-            
         List<Song> songList = new ArrayList(tblAllSongs.getItems());
         manager.saveAll(songList);
+        
     }
 }
