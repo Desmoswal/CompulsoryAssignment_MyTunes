@@ -14,15 +14,15 @@ public class Song {
     private String artist;
     private String title;
     private String time;
-    private int id;
+    private String genre;
 
-    public Song(String path, String artist, String title, String time, int id)
+    public Song(String path, String artist, String title, String genre, String time)
     {
         this.path = path;
         this.artist = artist;
         this.title = title;
         this.time = time;
-        this.id = id;
+        this.genre = genre;
     }
 
     
@@ -47,7 +47,7 @@ public class Song {
         return time;
     }
     
-    public int getId() {
-        return id;
+    public String getGenre() {
+        return genre;
     }
 }

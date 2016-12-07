@@ -12,12 +12,11 @@ import java.io.Serializable;
  *
  * @author KDM
  */
-public class Library implements Serializable{
+public class SongLibrary implements Serializable{
     private ArrayList<Song> songlist = new ArrayList<>();
     
-    public Library() {
-        songlist.add(new Song("../fasz.mp3","Artist","Title","0.00",1));
-        
+    public SongLibrary() {
+        songlist.add(new Song("../fasz.mp3","Artist","Title","0.00",""));  
     }
     
     public ArrayList<Song> getSongList() {
@@ -31,5 +30,4 @@ public class Library implements Serializable{
     public void removeSong(Song song) {
         songlist.remove(song);
     }
-    
 }

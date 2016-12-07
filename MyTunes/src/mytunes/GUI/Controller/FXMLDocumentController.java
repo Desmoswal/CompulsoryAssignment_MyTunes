@@ -25,6 +25,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,16 +48,17 @@ import mytunes.BE.*;
  */
 public class FXMLDocumentController implements Initializable
 {
-    private Library lib = new Library();
+    private SongLibrary lib = new SongLibrary();
+    private String[] metaData = new String[2];
     
     @FXML
     private Label labelcount;
     @FXML
-    private TableColumn<?, ?> colPlaylistsTitle;
+    private TableColumn<Playlist, String> colPlaylistsTitle;
     @FXML
-    private TableColumn<?, ?> colPlaylistsSongs;
+    private TableColumn<Playlist, String> colPlaylistsSongs;
     @FXML
-    private TableColumn<?, ?> colPlaylistsTime;
+    private TableColumn<Playlist, String> colPlaylistsTime;
     @FXML
     private Slider slideVol;
     @FXML
@@ -66,11 +68,11 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private Button btnNext;
     @FXML
-    private TableView<Library> tblCurPlaylist;
+    private TableView<SongLibrary> tblCurPlaylist;
     @FXML
-    private TableColumn<?, ?> colCurPlaylistTitle;
+    private TableColumn<Song, String> colCurPlaylistTitle;
     @FXML
-    private TableColumn<?, ?> colCurPlaylistTime;
+    private TableColumn<Song, String> colCurPlaylistTime;
     @FXML
     private TableView<Song> tblAllSongs;
     @FXML
@@ -120,17 +122,6 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private void openFile(ActionEvent event)
     {
-    
-    }
-    @FXML
-    private void handleButtonAction(ActionEvent event)
-    {
-        System.out.println("You clicked me!");
-
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + s);
-        
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
@@ -140,9 +131,37 @@ public class FXMLDocumentController implements Initializable
         File files = fileChooser.showOpenDialog(stage);
         String uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
         System.out.println(uriString);
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
-        player.play();
-
+        
+        Media m = new Media(uriString);
+        Media media = new Media(uriString);
+        media.getMetadata().get("artist");
+        media.getMetadata().addListener((MapChangeListener<String, Object>) change ->  
+                {
+                    // code to process metadata attribute change.
+                    String title = (String) m.getMetadata().get("title");
+                    String album = (String) m.getMetadata().get("album");
+                    String artist = (String) m.getMetadata().get("artist");
+                    String fullMetadata = (String)m.getMetadata().toString();
+                    
+                    metaData[0] = artist;
+                    metaData[1] = title;
+                    //Actually have no clue what this supposed to be.. 
+                    //Maybe for every mediafile in the folder ??
+                    //ObservableList<String> medialist = FXCollections.observableArrayList();
+                    //     medialist.addAll(medialist);
+                    //System.out.println(medialist);
+                    
+//                    System.out.println(title);
+//                    System.out.println(album);
+//                    System.out.println(artist);
+//                    System.out.println(fullMetadata);
+        });
+        
+        lib.addSong(new Song(files.getPath(), "anyád", "picsája","",""));
+    }
+    
+/*    private void readMetaData(File file) {
+        
         //-----Reading Metadata--------
         /**
          * First it adds a listener to the media
@@ -152,9 +171,9 @@ public class FXMLDocumentController implements Initializable
          * using title, album, artist.. etc. 
          * OR using fullMetadata which gets everything.
          * fullMetadata has raw metadata, look out for that.
-         */
-        Media m = new Media(uriString);
-        Media media = new Media(uriString);
+         
+        Media m = new Media(file.toURI().toString());
+        Media media = new Media(file.toURI().toString());
         media.getMetadata().addListener((MapChangeListener<String, Object>) change -> 
                 {
                     // code to process metadata attribute change.
@@ -163,17 +182,34 @@ public class FXMLDocumentController implements Initializable
                     String artist = (String) m.getMetadata().get("artist");
                     String fullMetadata = (String)m.getMetadata().toString();
                     
+                    metaData[0] = artist;
+                    metaData[1] = title;
                     //Actually have no clue what this supposed to be.. 
                     //Maybe for every mediafile in the folder ??
                     //ObservableList<String> medialist = FXCollections.observableArrayList();
                     //     medialist.addAll(medialist);
                     //System.out.println(medialist);
                     
-                    System.out.println(title);
-                    System.out.println(album);
-                    System.out.println(artist);
-                    System.out.println(fullMetadata);
+//                    System.out.println(title);
+//                    System.out.println(album);
+//                    System.out.println(artist);
+//                    System.out.println(fullMetadata);
         });
+    }*/
+    
+    @FXML
+    private void handleButtonAction(ActionEvent event)
+    {
+        System.out.println("You clicked me!");
+
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current relative path is: " + s);
+        
+//        MediaPlayer player = new MediaPlayer(new Media(uriString));
+//        player.play();
+
+        
         
         //Prints out the files in the folder
         File folder = new File(s);
