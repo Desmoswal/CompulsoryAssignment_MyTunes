@@ -25,12 +25,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mytunes.BE.*;
 import mytunes.BLL.SongManager;
@@ -41,8 +47,7 @@ import mytunes.BLL.SongManager;
  */
 public class FXMLDocumentController implements Initializable
 {
-    
-    
+
     @FXML
     private Label labelcount;
     @FXML
@@ -109,26 +114,32 @@ public class FXMLDocumentController implements Initializable
     private SongLibrary lib = new SongLibrary();
     
     SongManager manager = new SongManager();
+    
+    String currTitle;
+    String currAlbum;
+    String currArtist;
+    String currFullMetadata;
+    
+    
+    private ObservableList<String> ol = FXCollections.observableArrayList();
+    private final Object obj= new Object();
 
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb)
+    {
+       fillLibTable();
+    }
+    
     @FXML
     private void openFolder(ActionEvent event)
     {
     
     }
+    
     @FXML
     private void openFile(ActionEvent event)
     {
-    
-    }
-    @FXML
-    private void handleButtonAction(ActionEvent event)
-    {
-        System.out.println("You clicked me!");
-
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + s);
-        
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
@@ -140,39 +151,25 @@ public class FXMLDocumentController implements Initializable
         System.out.println(uriString);
         MediaPlayer player = new MediaPlayer(new Media(uriString));
         player.play();
-
-        //-----Reading Metadata--------
-        /**
-         * First it adds a listener to the media
-         * then it gets every single detail of
-         * the media file.
-         * You can choose to get every data one by one,
-         * using title, album, artist.. etc. 
-         * OR using fullMetadata which gets everything.
-         * fullMetadata has raw metadata, look out for that.
-         */
-        Media m = new Media(uriString);
-        Media media = new Media(uriString);
-        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> 
-                {
-                    // code to process metadata attribute change.
-                    String title = (String) m.getMetadata().get("title");
-                    String album = (String) m.getMetadata().get("album");
-                    String artist = (String) m.getMetadata().get("artist");
-                    String fullMetadata = (String)m.getMetadata().toString();
-                    
-                    //Actually have no clue what this supposed to be.. 
-                    //Maybe for every mediafile in the folder ??
-                    //ObservableList<String> medialist = FXCollections.observableArrayList();
-                    //     medialist.addAll(medialist);
-                    //System.out.println(medialist);
-                    
-                    System.out.println(title);
-                    System.out.println(album);
-                    System.out.println(artist);
-                    System.out.println(fullMetadata);
-        });
         
+        readMetadata(uriString);
+        
+        lib.addSong(new Song(uriString, currArtist, currTitle, "", "0"));
+        System.out.println(currArtist + "openfile");
+ 
+        
+        fillLibTable();
+    }
+    
+    @FXML
+    private void handleButtonAction(ActionEvent event) throws IOException
+    {
+        System.out.println("You clicked me!");
+
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current relative path is: " + s);
+ 
         //Prints out the files in the folder
         File folder = new File(s);
         File[] listOfFiles = folder.listFiles();
@@ -184,27 +181,91 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
+        
+        /**
+         * POPUPS
+         */
+        // Fetches primary stage and gets loader and loads FXML file to Parent
+        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/mytunes/GUI/View/EditSongPopup.fxml"));
+        Parent root = loader.load();
+        
+        // Fetches controller from patient view
+        EditSongPopupController controller = 
+                loader.getController();
+        
+        //controller.setPatient(patient);
+        
+        // Sets new stage as modal window
+        Stage stagePatientView = new Stage();
+        stagePatientView.setScene(new Scene(root));
+        
+        stagePatientView.initModality(Modality.WINDOW_MODAL);
+        stagePatientView.initOwner(primStage);
+        
+        stagePatientView.show();
+        
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb)
+    @FXML
+    private void readMetadata(String uriString)
     {
-       
-       fillLibTable();
+        //-----Reading Metadata--------
+        /**
+         * First it adds a listener to the media
+         * then it gets every single detail of
+         * the media file.
+         * You can choose to get every data one by one,
+         * using title, album, artist.. etc. 
+         * OR using fullMetadata which gets everything.
+         * fullMetadata has raw metadata, look out for that.
+         */
+        
+        MediaPlayer player = new MediaPlayer(new Media(uriString));
+        player.setOnReady(new Runnable() {
+
+        @Override
+        public void run() {
+            currArtist =(String) player.getMedia().getMetadata().get("artist");
+            ol.add(currArtist);
+            synchronized(obj){//this is required since mp.setOnReady creates a new thread and our loopp  in the main thread
+                obj.notify();// the loop has to wait unitl we are able to get the media metadata thats why use .wait() and .notify() to synce the two threads(main thread and MediaPlayer thread)
+            }
+            
+            System.out.println(currArtist + "aaaaaaaaaaa");
+        }
+    });
+        /*
+        Media m = new Media(uriString);
+        Media media = new Media(uriString);
+        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> 
+                {
+                    // code to process metadata attribute change.
+                    currTitle = (String) m.getMetadata().get("title");
+                    currAlbum = (String) m.getMetadata().get("album");
+                    currArtist = (String) m.getMetadata().get("artist");
+                    currFullMetadata = (String)m.getMetadata().toString();
+                    
+                    //Actually have no clue what this supposed to be.. 
+                    //Maybe for every mediafile in the folder ??
+                    //ObservableList<String> medialist = FXCollections.observableArrayList();
+                    //     medialist.addAll(medialist);
+                    //System.out.println(medialist);
+
+                    System.out.println(currTitle);
+                    System.out.println(currAlbum);
+                    System.out.println(currArtist);
+                    System.out.println(currFullMetadata);
+                    
+                                
+        });*/
     }
 
     @FXML
     private void handleEditSongButtonAction(ActionEvent event)
     {
-        //Filechooser with extension filters for selecting music
-        //Maybe later folders too
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        fileChooser.setTitle("Open Music File");
         
-        fileChooser.showOpenDialog(stage);
     }
 
     public void handleSavePlaylistAction(ActionEvent e)
@@ -247,6 +308,5 @@ public class FXMLDocumentController implements Initializable
             //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
         List<Song> songList = new ArrayList(tblAllSongs.getItems());
         manager.saveAll(songList);
-        
     }
 }

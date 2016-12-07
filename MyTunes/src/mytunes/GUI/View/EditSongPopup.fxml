@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="266.0" prefWidth="377.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.View.EditSongPopupController">
+<AnchorPane id="AnchorPane" prefHeight="266.0" prefWidth="377.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.EditSongPopupController">
    <children>
       <Label layoutX="77.0" layoutY="43.0" text="Title" textAlignment="RIGHT" />
       <Label layoutX="72.0" layoutY="85.0" text="Artist" textAlignment="RIGHT" />
