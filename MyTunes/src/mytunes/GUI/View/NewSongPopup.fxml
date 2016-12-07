@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="mytunes.GUI.View.NewSongPopupController">
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="mytunes.GUI.Controller.NewSongPopupController">
    <children>
       <Label layoutX="173.0" layoutY="24.0" text="New song" textAlignment="CENTER" />
       <Label layoutX="72.0" layoutY="74.0" text="Title" />

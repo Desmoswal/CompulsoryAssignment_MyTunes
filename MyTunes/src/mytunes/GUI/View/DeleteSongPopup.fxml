@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.View.DeleteSongPopupController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.DeleteSongPopupController">
    <children>
       <Label layoutX="44.0" layoutY="50.0" text="Are you surely want to delete this song?" />
       <Button fx:id="btnYesDeleteSong" layoutX="94.0" layoutY="119.0" mnemonicParsing="false" onAction="#deleteSong" text="Yes" />

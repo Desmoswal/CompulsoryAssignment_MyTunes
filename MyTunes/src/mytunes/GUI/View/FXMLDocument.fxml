@@ -88,15 +88,15 @@
             <TableColumn fx:id="colAllSongsTime" minWidth="0.0" prefWidth="46.0" text="Time" />
         </columns>
       </TableView>
-      <Button fx:id="btnNewPlaylist" layoutX="14.0" layoutY="445.0" mnemonicParsing="false" text="New">
+      <Button fx:id="btnNewPlaylist" layoutX="14.0" layoutY="445.0" mnemonicParsing="false" onAction="#openNewPlaylist" text="New">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="btnEditPlaylist" layoutX="65.0" layoutY="445.0" mnemonicParsing="false" onAction="#handleSavePlaylistAction" text="Edit">
+      <Button fx:id="btnEditPlaylist" layoutX="65.0" layoutY="445.0" mnemonicParsing="false" onAction="#openEditPlaylist" text="Edit">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="btnDeletePlaylist" layoutX="111.0" layoutY="445.0" mnemonicParsing="false" text="Delete">
+      <Button fx:id="btnDeletePlaylist" layoutX="111.0" layoutY="445.0" mnemonicParsing="false" onAction="#openDeletePlaylist" text="Delete">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
@@ -104,23 +104,23 @@
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="btnMoveUp" layoutX="275.0" layoutY="445.0" mnemonicParsing="false" text="Up">
+      <Button fx:id="btnMoveUp" layoutX="275.0" layoutY="445.0" mnemonicParsing="false" onAction="#moveSongUp" text="Up">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="btnMoveDown" layoutX="317.0" layoutY="445.0" mnemonicParsing="false" text="Down">
+      <Button fx:id="btnMoveDown" layoutX="317.0" layoutY="445.0" mnemonicParsing="false" onAction="#moveSongDown" text="Down">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="btnDeleteFromPlaylist" layoutX="374.0" layoutY="445.0" mnemonicParsing="false" text="Delete">
+      <Button fx:id="btnDeleteFromPlaylist" layoutX="374.0" layoutY="445.0" mnemonicParsing="false" onAction="#deleteSongFromPlaylist" text="Delete">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="btnEditSong" layoutX="659.0" layoutY="445.0" mnemonicParsing="false" onAction="#handleEditSongButtonAction" text="Edit">
+      <Button fx:id="btnEditSong" layoutX="659.0" layoutY="445.0" mnemonicParsing="false" onAction="#openEditSong" text="Edit">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="btnDeleteSong" layoutX="707.0" layoutY="445.0" mnemonicParsing="false" text="Delete">
+      <Button fx:id="btnDeleteSong" layoutX="707.0" layoutY="445.0" mnemonicParsing="false" onAction="#openDeleteSong" text="Delete">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Button>

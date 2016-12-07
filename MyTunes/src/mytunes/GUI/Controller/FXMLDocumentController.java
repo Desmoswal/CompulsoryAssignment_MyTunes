@@ -181,31 +181,6 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
-        
-        /**
-         * POPUPS
-         */
-        // Fetches primary stage and gets loader and loads FXML file to Parent
-        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/mytunes/GUI/View/EditSongPopup.fxml"));
-        Parent root = loader.load();
-        
-        // Fetches controller from patient view
-        EditSongPopupController controller = 
-                loader.getController();
-        
-        //controller.setPatient(patient);
-        
-        // Sets new stage as modal window
-        Stage stagePatientView = new Stage();
-        stagePatientView.setScene(new Scene(root));
-        
-        stagePatientView.initModality(Modality.WINDOW_MODAL);
-        stagePatientView.initOwner(primStage);
-        
-        stagePatientView.show();
-        
     }
 
     @FXML
@@ -263,12 +238,173 @@ public class FXMLDocumentController implements Initializable
     }
 
     @FXML
-    private void handleEditSongButtonAction(ActionEvent event)
-    {
+    private void openNewSong(ActionEvent event) throws IOException {
+        /**
+         * POPUPS
+         */
+        // Fetches primary stage and gets loader and loads FXML file to Parent
+        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/NewSongPopup.fxml"));
+        Parent root = loader.load();
         
+        // Fetches controller from patient view
+        NewSongPopupController controller = loader.getController();
+        
+        //controller.setPatient(patient);
+        
+        // Sets new stage as modal window
+        Stage stagePatientView = new Stage();
+        stagePatientView.setScene(new Scene(root));
+        
+        stagePatientView.initModality(Modality.WINDOW_MODAL);
+        stagePatientView.initOwner(primStage);
+        
+        stagePatientView.show();
+    }
+    
+    @FXML
+    private void openEditSong(ActionEvent event) throws IOException
+    {
+        /**
+         * POPUPS
+         */
+        // Fetches primary stage and gets loader and loads FXML file to Parent
+        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/EditSongPopup.fxml"));
+        Parent root = loader.load();
+        
+        // Fetches controller from patient view
+        EditSongPopupController controller = loader.getController();
+        
+        //controller.setPatient(patient);
+        
+        // Sets new stage as modal window
+        Stage stagePatientView = new Stage();
+        stagePatientView.setScene(new Scene(root));
+        
+        stagePatientView.initModality(Modality.WINDOW_MODAL);
+        stagePatientView.initOwner(primStage);
+        
+        stagePatientView.show();
+    }
+    
+    @FXML
+    private void openDeleteSong(ActionEvent event) throws IOException {
+        /**
+         * POPUPS
+         */
+        // Fetches primary stage and gets loader and loads FXML file to Parent
+        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/DeleteSongPopup.fxml"));
+        Parent root = loader.load();
+        
+        // Fetches controller from patient view
+        DeleteSongPopupController controller = loader.getController();
+        
+        //controller.setPatient(patient);
+        
+        // Sets new stage as modal window
+        Stage stagePatientView = new Stage();
+        stagePatientView.setScene(new Scene(root));
+        
+        stagePatientView.initModality(Modality.WINDOW_MODAL);
+        stagePatientView.initOwner(primStage);
+        
+        stagePatientView.show();
+    }
+    
+    @FXML
+    private void openEditPlaylist(ActionEvent event) throws IOException {
+        /**
+         * POPUPS
+         */
+        // Fetches primary stage and gets loader and loads FXML file to Parent
+        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/EditPlaylistPopup.fxml"));
+        Parent root = loader.load();
+        
+        // Fetches controller from patient view
+        EditPlaylistPopupController controller = loader.getController();
+        
+        //controller.setPatient(patient);
+        
+        // Sets new stage as modal window
+        Stage stagePatientView = new Stage();
+        stagePatientView.setScene(new Scene(root));
+        
+        stagePatientView.initModality(Modality.WINDOW_MODAL);
+        stagePatientView.initOwner(primStage);
+        
+        stagePatientView.show();
+    }
+    
+    @FXML
+    private void openDeletePlaylist(ActionEvent event) throws IOException {
+        /**
+         * POPUPS
+         */
+        // Fetches primary stage and gets loader and loads FXML file to Parent
+        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/DeletePlaylistPopup.fxml"));
+        Parent root = loader.load();
+        
+        // Fetches controller from patient view
+        DeletePlaylistPopupController controller = loader.getController();
+        
+        //controller.setPatient(patient);
+        
+        // Sets new stage as modal window
+        Stage stagePatientView = new Stage();
+        stagePatientView.setScene(new Scene(root));
+        
+        stagePatientView.initModality(Modality.WINDOW_MODAL);
+        stagePatientView.initOwner(primStage);
+        
+        stagePatientView.show();
+    }
+    
+    @FXML
+    private void openNewPlaylist(ActionEvent event) throws IOException {
+        /**
+         * POPUPS
+         */
+        // Fetches primary stage and gets loader and loads FXML file to Parent
+        Stage primStage = (Stage)tblAllSongs.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/NewPlaylistPopup.fxml"));
+        Parent root = loader.load();
+        
+        // Fetches controller from patient view
+        NewPlaylistPopupController controller = loader.getController();
+        
+        //controller.setPatient(patient);
+        
+        // Sets new stage as modal window
+        Stage stagePatientView = new Stage();
+        stagePatientView.setScene(new Scene(root));
+        
+        stagePatientView.initModality(Modality.WINDOW_MODAL);
+        stagePatientView.initOwner(primStage);
+        
+        stagePatientView.show();
     }
 
-    public void handleSavePlaylistAction(ActionEvent e)
+    @FXML
+    private void moveSongUp(ActionEvent event) {
+        
+    }
+    
+    @FXML
+    private void moveSongDown(ActionEvent event) {
+        
+    }
+    
+    @FXML
+    private void deleteSongFromPlaylist(ActionEvent event) {
+        
+    }
+    
+    @FXML
+    private void handleSavePlaylistAction(ActionEvent e)
     {
         //Saves a .playlist file, supposed to save every detail of the playlists
         FileChooser fileChooser = new FileChooser();
