@@ -5,19 +5,19 @@
  */
 package mytunes.BLL;
 
+import mytunes.BE.Library;
 import mytunes.BE.Song;
-import mytunes.BE.Playlist;
 import mytunes.DAL.FileManager;
-import mytunes.DAL.SerialFileHandler;
+import mytunes.DAL.TextFileHandler;
 import java.util.List;
 
 /**
  *
  * @author Desmoswal
  */
-public class FileSaver
+public class SongManager
 {
-    private FileManager fileManager = new SerialFileHandler();
+    private FileManager fileManager = new TextFileHandler();
     
     public void saveAll(List<Song> songList)
     {
@@ -28,4 +28,5 @@ public class FileSaver
     {
         return fileManager.getAll();
     }
+    
 }
