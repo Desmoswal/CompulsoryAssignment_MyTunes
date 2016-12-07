@@ -6,7 +6,7 @@
 package mytunes.DAL;
 
 import mytunes.BE.Song;
-import mytunes.BE.Library;
+import mytunes.BE.SongLibrary;
 import mytunes.GUI.Controller.FXMLDocumentController;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

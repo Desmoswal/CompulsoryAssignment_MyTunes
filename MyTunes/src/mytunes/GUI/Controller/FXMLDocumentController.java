@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import mytunes.BE.*;
+import mytunes.BLL.SongManager;
 
 /**
  *
@@ -50,6 +52,8 @@ public class FXMLDocumentController implements Initializable
 {
     private SongLibrary lib = new SongLibrary();
     private String[] metaData = new String[2];
+    
+    SongManager manager = new SongManager();
     
     @FXML
     private Label labelcount;
@@ -295,6 +299,7 @@ public class FXMLDocumentController implements Initializable
             
             //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
             
-        
+        List<Song> songList = new ArrayList(tblAllSongs.getItems());
+        manager.saveAll(songList);
     }
 }

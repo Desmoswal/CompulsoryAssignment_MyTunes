@@ -5,7 +5,7 @@
  */
 package mytunes.BLL;
 
-import mytunes.BE.Library;
+import mytunes.BE.SongLibrary;
 import mytunes.BE.Song;
 import mytunes.DAL.FileManager;
 import mytunes.DAL.TextFileHandler;
