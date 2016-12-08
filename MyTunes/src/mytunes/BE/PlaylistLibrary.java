@@ -4,15 +4,19 @@
  * and open the template in the editor.
  */
 package mytunes.BE;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Kristof
  */
-public class PlaylistLibrary implements Serializable {
-    private ArrayList<Playlist> playlistList = new ArrayList<>();
+public class PlaylistLibrary {
+    private ArrayList<Playlist> playlistList;
+    private static PlaylistLibrary libPl;
+    
+    private PlaylistLibrary() {
+        this.playlistList = new ArrayList<>();
+    }
     
     public ArrayList<Playlist> getPlaylists() {
         return playlistList;
@@ -24,5 +28,14 @@ public class PlaylistLibrary implements Serializable {
     
     public void removePlaylist(Playlist playlist) {
         playlistList.remove(playlist);
+    }
+    
+    public static void createInstance() {
+        if(libPl == null) {
+            libPl = new PlaylistLibrary();
+        }
+    }
+    public static PlaylistLibrary getInstance() {
+        return libPl;
     }
 }

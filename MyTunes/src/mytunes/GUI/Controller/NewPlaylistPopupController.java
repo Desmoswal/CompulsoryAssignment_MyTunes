@@ -6,11 +6,18 @@
 package mytunes.GUI.Controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import mytunes.BE.*;
+import mytunes.BE.PlaylistLibrary;
 
 /**
  * FXML Controller class
@@ -18,9 +25,14 @@ import javafx.scene.control.Button;
  * @author Kristof
  */
 public class NewPlaylistPopupController implements Initializable {
+    PlaylistLibrary libPl;
 
     @FXML
     private Button btnCreatePlaylist;
+    @FXML
+    private TextField txtNewPlaylistName;
+    @FXML
+    private Label labNewPlaylistError;
     
 
     /**
@@ -28,12 +40,20 @@ public class NewPlaylistPopupController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        PlaylistLibrary.createInstance();
+        libPl = PlaylistLibrary.getInstance();
     }    
 
     @FXML
     private void createPlaylist(ActionEvent event) {
-        
+        if(!txtNewPlaylistName.getText().isEmpty()) {
+            libPl.addPlaylist(new Playlist(txtNewPlaylistName.getText(),new ArrayList<>()));
+            
+            Stage curStage = (Stage) btnCreatePlaylist.getScene().getWindow();
+            curStage.close();
+        } else {
+            labNewPlaylistError.setText("Please input a name for the playlist.");
+        }
     }
     
 }
