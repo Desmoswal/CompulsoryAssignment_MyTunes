@@ -2,18 +2,43 @@
 
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="266.0" prefWidth="377.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.EditSongPopupController">
    <children>
-      <Label layoutX="77.0" layoutY="43.0" text="Title" textAlignment="RIGHT" />
-      <Label layoutX="72.0" layoutY="85.0" text="Artist" textAlignment="RIGHT" />
-      <Label layoutX="72.0" layoutY="129.0" text="Genre" textAlignment="RIGHT" />
-      <Label layoutX="175.0" layoutY="14.0" text="Edit Song" textAlignment="CENTER" />
+        <ImageView fitHeight="266.0" fitWidth="377.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="http://kivulallo.ddns.net/assignment/editsongpop.png" />
+            </image>
+        </ImageView>
+      <Label layoutX="77.0" layoutY="43.0" text="Title" textAlignment="RIGHT">
+         <font>
+            <Font name="Magneto Bold" size="12.0" />
+         </font></Label>
+      <Label layoutX="72.0" layoutY="85.0" text="Artist" textAlignment="RIGHT">
+         <font>
+            <Font name="Magneto Bold" size="12.0" />
+         </font></Label>
+      <Label layoutX="72.0" layoutY="129.0" text="Genre" textAlignment="RIGHT">
+         <font>
+            <Font name="Magneto Bold" size="12.0" />
+         </font></Label>
+      <Label layoutX="175.0" layoutY="14.0" text="Edit Song" textAlignment="CENTER">
+         <font>
+            <Font name="Magneto Bold" size="12.0" />
+         </font></Label>
       <TextField fx:id="txtTitle" layoutX="115.0" layoutY="39.0" />
       <TextField fx:id="txtArtist" layoutX="115.0" layoutY="81.0" />
       <TextField fx:id="txtGenre" layoutX="116.0" layoutY="125.0" />
-      <Button fx:id="btnSave" layoutX="96.0" layoutY="190.0" mnemonicParsing="false" onAction="#saveSong" text="Save" />
-      <Button fx:id="btnCancel" layoutX="238.0" layoutY="190.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <Button fx:id="btnSave" layoutX="96.0" layoutY="190.0" mnemonicParsing="false" onAction="#saveSong" text="Save">
+         <font>
+            <Font name="Magneto Bold" size="12.0" />
+         </font></Button>
+      <Button fx:id="btnCancel" layoutX="238.0" layoutY="190.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+         <font>
+            <Font name="Magneto Bold" size="12.0" />
+         </font></Button>
    </children>
 </AnchorPane>

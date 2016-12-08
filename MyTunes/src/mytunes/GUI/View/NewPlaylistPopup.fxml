@@ -6,29 +6,28 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="251.0" prefWidth="248.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.NewPlaylistPopupController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="169.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.NewPlaylistPopupController">
    <children>
-        <ImageView fitHeight="251.0" fitWidth="248.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="250.0" fitWidth="300.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="http://kivulallo.ddns.net/assignment/bg.jpg" />
+                <Image url="http://kivulallo.ddns.net/assignment/editsongpop.png" />
             </image>
         </ImageView>
-      <Label layoutX="29.0" layoutY="32.0" text="Create new playlist">
+      <Label layoutX="67.0" layoutY="32.0" prefHeight="31.0" prefWidth="197.0" text="Create new playlist">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Label>
-      <Label layoutX="27.0" layoutY="95.0" text="Name:">
+      <Label layoutX="36.0" layoutY="94.0" text="Name:">
          <font>
-            <Font name="Magneto Bold" size="12.0" />
+            <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <TextField layoutX="74.0" layoutY="91.0" promptText="Name of new playlist">
+      <TextField layoutX="96.0" layoutY="91.0" promptText="Name of new playlist">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></TextField>
-      <Button fx:id="btnCreatePlaylist" layoutX="98.0" layoutY="174.0" mnemonicParsing="false" onAction="#createPlaylist" text="Create">
+      <Button fx:id="btnCreatePlaylist" layoutX="130.0" layoutY="125.0" mnemonicParsing="false" onAction="#createPlaylist" text="Create">
          <font>
-            <Font name="Magneto Bold" size="12.0" />
+            <Font name="Magneto Bold" size="14.0" />
          </font></Button>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="28.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>
