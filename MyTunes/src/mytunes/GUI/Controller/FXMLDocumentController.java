@@ -118,6 +118,8 @@ public class FXMLDocumentController implements Initializable
     String currTitle;
     String currAlbum;
     String currArtist;
+    String currGenre;
+    String currDuration;
     String currFullMetadata;
     
     
@@ -132,58 +134,6 @@ public class FXMLDocumentController implements Initializable
     }
     
     @FXML
-    private void openFolder(ActionEvent event)
-    {
-    
-    }
-    
-    @FXML
-    private void openFile(ActionEvent event)
-    {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        fileChooser.setTitle("Open Music File");
-
-        File files = fileChooser.showOpenDialog(stage);
-        String uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
-        System.out.println(uriString);
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
-        player.play();
-        
-        readMetadata(uriString);
-        
-        lib.addSong(new Song(uriString, currArtist, currTitle, "", "0"));
-        System.out.println(currArtist + "openfile");
- 
-        
-        fillLibTable();
-    }
-    
-    @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException
-    {
-        System.out.println("You clicked me!");
-
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + s);
- 
-        //Prints out the files in the folder
-        File folder = new File(s);
-        File[] listOfFiles = folder.listFiles();
-
-        for (File file : listOfFiles)
-        {
-            if (file.isFile())
-            {
-                System.out.println(file.getName());
-            }
-        }
-    }
-
-    @FXML
     private void readMetadata(String uriString)
     {
         //-----Reading Metadata--------
@@ -196,19 +146,48 @@ public class FXMLDocumentController implements Initializable
          * OR using fullMetadata which gets everything.
          * fullMetadata has raw metadata, look out for that.
          */
-        
+ 
         MediaPlayer player = new MediaPlayer(new Media(uriString));
         player.setOnReady(new Runnable() {
 
         @Override
         public void run() {
             currArtist =(String) player.getMedia().getMetadata().get("artist");
+            currTitle =(String) player.getMedia().getMetadata().get("title");
+            currAlbum =(String) player.getMedia().getMetadata().get("album");
+            currGenre = (String) player.getMedia().getMetadata().get("genre");
+            /*double tmpCurrMinToSec = Math.floor(player.getMedia().durationProperty().getValue().toMinutes() * 60); //Convert Floored minutes to seconds
+            double currDurationMinutes = Math.floor(player.getMedia().durationProperty().getValue().toMinutes()); 
+            double currDurationSeconds = Math.floor(player.getMedia().durationProperty().getValue().toSeconds()) - tmpCurrMinToSec;
+            String currDuration = currDurationMinutes + ":" + currDurationSeconds;*/
+            currFullMetadata =(String) player.getMedia().getMetadata().toString();
+            
+            
             ol.add(currArtist);
+            ol.add(currTitle);
+            ol.add(currAlbum);
+            ol.add(currFullMetadata);
             synchronized(obj){//this is required since mp.setOnReady creates a new thread and our loopp  in the main thread
+                try {
+                    obj.wait(10);
+                    //System.out.println(currArtist + "afterwait");
+                    lib.addSong(new Song(uriString, currArtist, currTitle, currGenre, "0"));
+                    fillLibTable();
+                    } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    System.out.println("nem");
+                }
                 obj.notify();// the loop has to wait unitl we are able to get the media metadata thats why use .wait() and .notify() to synce the two threads(main thread and MediaPlayer thread)
             }
             
-            System.out.println(currArtist + "aaaaaaaaaaa");
+            System.out.println("--------New Metadata info--------");
+            System.out.println(currArtist);
+            System.out.println(currTitle);
+            System.out.println(currAlbum);
+            System.out.println(currGenre);
+//            System.out.println(currDuration);
+            System.out.println(currFullMetadata);
+            System.out.println("--------End of new metadata-------");
         }
     });
         /*
@@ -235,7 +214,61 @@ public class FXMLDocumentController implements Initializable
                     
                                 
         });*/
+        
+        
     }
+    
+    @FXML
+    private void openFolder(ActionEvent event)
+    {
+    
+    }
+    
+    @FXML
+    private void openFile(ActionEvent event)
+    {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        fileChooser.setTitle("Open Music File");
+
+        File files = fileChooser.showOpenDialog(stage);
+        String uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
+        System.out.println(uriString);
+        MediaPlayer player = new MediaPlayer(new Media(uriString));
+        player.play();
+        
+        readMetadata(uriString);
+        
+        //lib.addSong(new Song(uriString, currArtist, currTitle, "", "0"));
+ 
+        
+        //fillLibTable();
+    }
+    
+    @FXML
+    private void handleButtonAction(ActionEvent event) throws IOException
+    {
+        
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current relative path is: " + s);
+ 
+        //Prints out the files in the folder
+        File folder = new File(s);
+        File[] listOfFiles = folder.listFiles();
+
+        for (File file : listOfFiles)
+        {
+            if (file.isFile())
+            {
+                System.out.println(file.getName());
+            }
+        }
+    }
+
+
 
     @FXML
     private void openNewSong(ActionEvent event) throws IOException {
@@ -437,6 +470,7 @@ public class FXMLDocumentController implements Initializable
         
             colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
             colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
+            colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
             tblAllSongs.setItems(songlist);
             
     

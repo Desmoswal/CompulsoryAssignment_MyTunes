@@ -16,8 +16,8 @@ public class SongLibrary implements Serializable{
     private ArrayList<Song> songlist = new ArrayList<>();
     
     public SongLibrary() {
-        songlist.add(new Song("../fasz.mp3","Artist","Title","0.00",""));  
-        songlist.add(new Song("../asd.mp3", "Artist2", "Title2", "0.00",""));
+        //songlist.add(new Song("../fasz.mp3","Artist","Title","0.00",""));  
+        //songlist.add(new Song("../asd.mp3", "Artist2", "Title2", "0.00",""));
     }
     
     public ArrayList<Song> getSongList() {
