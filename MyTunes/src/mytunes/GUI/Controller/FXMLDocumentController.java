@@ -16,6 +16,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
+import javafx.scene.control.Alert;
+import javafx.beans.binding.StringBinding;
 
 //---------------------
 import javafx.scene.media.Media;
@@ -114,6 +119,8 @@ public class FXMLDocumentController implements Initializable
     private SongLibrary lib = new SongLibrary();
     
     SongManager manager = new SongManager();
+    MediaPlayer mp = null;
+    String songURIPath = "http://www.freexmasmp3.com/files/12-days-funk.mp3";
     
     String currTitle;
     String currAlbum;
@@ -131,6 +138,22 @@ public class FXMLDocumentController implements Initializable
     public void initialize(URL url, ResourceBundle rb)
     {
        fillLibTable();
+       txtSearch.setText(songURIPath);
+        try
+        {
+            URI songURI = new URI(songURIPath);
+            mp = new MediaPlayer(new Media(songURI.toString()));
+            bindPlayerToGUI();
+        }
+        catch (URISyntaxException|UnsupportedOperationException ex)
+        {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            
+            Alert alert = 
+                new Alert(Alert.AlertType.ERROR, 
+                            songURIPath + " not a usable URI" + ex.getMessage()){};
+            alert.show();
+        }
     }
     
     @FXML
@@ -248,7 +271,7 @@ public class FXMLDocumentController implements Initializable
     }
     
     @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException
+    private void handleButtonAction(ActionEvent event) throws IOException, URISyntaxException
     {
         
         Path currentRelativePath = Paths.get("");
@@ -266,6 +289,8 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
+        URI songURI = new URI(txtSearch.getText());
+        playSong(songURI);
     }
 
 
@@ -478,5 +503,63 @@ public class FXMLDocumentController implements Initializable
             //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
         List<Song> songList = new ArrayList(tblAllSongs.getItems());
         manager.saveAll(songList);
+    }
+    
+    private void playSong(URI songURI)
+        {
+          if (mp != null && mp.getStatus() == MediaPlayer.Status.PLAYING)
+        {
+            mp.stop();
+        }
+        try
+        {
+            mp = new MediaPlayer(new Media(songURI.toString()));
+            bindPlayerToGUI();
+            mp.play();
+        }
+        catch (UnsupportedOperationException ex)
+        {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            
+            Alert alert = 
+                new Alert(Alert.AlertType.ERROR, 
+                            songURIPath + String.format("%n") + ex.getMessage()){};
+            alert.show();
+        }  
+        }
+    
+    private void bindPlayerToGUI()
+    {
+        // Binds the currentTimeProperty to a StringProperty on the label
+        // The computeValue() calculates minutes and seconds from the
+        // CurrentTimeProperty, which is a javafx Duration type.
+        labelcount.textProperty().bind(
+            new StringBinding()
+            {
+                // Initialization block 
+                // Somewhat like a constructor without arguments
+                { 
+                    // Makes the StringBinding listen for changes to 
+                    // the currentTimeProperty
+                    super.bind(mp.currentTimeProperty());
+                }
+
+                @Override
+                protected String computeValue()
+                {
+                    
+                    String form = String.format("%d min ,%d secs", 
+                        TimeUnit.MILLISECONDS.toMinutes((long)mp.getCurrentTime().toMillis()),
+                        TimeUnit.MILLISECONDS.toSeconds((long)mp.getCurrentTime().toMillis()) - 
+                        TimeUnit.MINUTES.toSeconds(
+                            TimeUnit.MILLISECONDS.toMinutes(
+                                (long)mp.getCurrentTime().toMillis()
+                            )
+                        )
+                    );
+                    
+                    return form;
+                }
+            });
     }
 }
