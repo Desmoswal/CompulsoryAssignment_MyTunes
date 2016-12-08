@@ -15,12 +15,12 @@
         </ImageView>
       <TableView layoutX="905.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0">
         <columns>
-          <TableColumn fx:id="colPlaylistsTitle" prefWidth="82.0" text="Title" />
-            <TableColumn fx:id="colPlaylistsSongs" prefWidth="56.0" text="Songs" />
-            <TableColumn fx:id="colPlaylistsTime" prefWidth="65.0" text="Time" />
+          <TableColumn fx:id="colPlaylistsTitle" prefWidth="120.0" text="Title" />
+            <TableColumn fx:id="colPlaylistsSongs" prefWidth="116.0" text="Songs" />
+            <TableColumn fx:id="colPlaylistsTime" prefWidth="83.0" text="Time" />
         </columns>
       </TableView>
-      <GridPane layoutX="30.0" layoutY="19.0" prefHeight="107.0" prefWidth="306.0" AnchorPane.rightAnchor="881.0">
+      <GridPane layoutX="30.0" layoutY="19.0" prefHeight="107.0" prefWidth="284.0" AnchorPane.rightAnchor="920.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -29,7 +29,7 @@
           <RowConstraints minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Slider fx:id="slideVol" prefHeight="26.0" prefWidth="225.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+            <Slider fx:id="slideVol" prefHeight="27.0" prefWidth="280.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
             <GridPane prefHeight="42.0" prefWidth="230.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -76,16 +76,16 @@
       </GridPane>
       <TableView fx:id="tblCurPlaylist" layoutX="460.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0">
         <columns>
-          <TableColumn fx:id="colCurPlaylistTitle" prefWidth="128.0" text="Title" />
-            <TableColumn fx:id="colCurPlaylistTime" prefWidth="75.0" text="Time" />
+          <TableColumn fx:id="colCurPlaylistTitle" prefWidth="171.0" text="Title" />
+            <TableColumn fx:id="colCurPlaylistTime" prefWidth="148.0" text="Time" />
         </columns>
       </TableView>
       <TableView fx:id="tblAllSongs" layoutX="80.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0">
         <columns>
-            <TableColumn fx:id="colAllSongsArtist" prefWidth="61.0" text="Artist" />
-          <TableColumn fx:id="colAllSongsTitle" prefWidth="78.0" text="Title" />
-            <TableColumn fx:id="colAllSongsGenre" prefWidth="62.0" text="Genre" />
-            <TableColumn fx:id="colAllSongsTime" minWidth="0.0" prefWidth="46.0" text="Time" />
+            <TableColumn fx:id="colAllSongsArtist" prefWidth="90.0" text="Artist" />
+          <TableColumn fx:id="colAllSongsTitle" prefWidth="96.0" text="Title" />
+            <TableColumn fx:id="colAllSongsGenre" prefWidth="65.0" text="Genre" />
+            <TableColumn fx:id="colAllSongsTime" minWidth="0.0" prefWidth="65.0" text="Time" />
         </columns>
       </TableView>
       <Button fx:id="btnNewPlaylist" layoutX="80.0" layoutY="648.0" mnemonicParsing="false" onAction="#openNewPlaylist" text="New">
@@ -124,16 +124,16 @@
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Slider fx:id="slideTime" layoutX="522.0" layoutY="80.0" prefHeight="14.0" prefWidth="273.0" />
-      <Label layoutX="522.0" layoutY="44.0" text="Please select a song to play">
+      <Slider fx:id="slideTime" layoutX="473.0" layoutY="74.0" prefHeight="14.0" prefWidth="295.0" />
+      <Label layoutX="484.0" layoutY="44.0" text="Please select a song to play">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Label>
-      <Label layoutX="598.0" layoutY="7.0" text="Now playing">
+      <Label layoutX="560.0" layoutY="7.0" text="Now playing">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Label>
-      <GridPane layoutX="343.0" layoutY="79.0" prefHeight="29.0" prefWidth="164.0" AnchorPane.bottomAnchor="580.0" AnchorPane.rightAnchor="543.0">
+      <GridPane layoutX="538.0" layoutY="97.0" prefHeight="29.0" prefWidth="164.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -165,7 +165,7 @@
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Label layoutX="206.0" layoutY="139.0" text="Playlists">
+      <Label layoutX="187.0" layoutY="139.0" text="Playlists">
          <font>
             <Font name="Magneto Bold" size="22.0" />
          </font>
@@ -189,5 +189,11 @@
             <Font name="Magneto Bold" size="18.0" />
          </font>
       </MenuButton>
-   </children>
+      <Button fx:id="btnMute" layoutX="33.0" layoutY="94.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="Button" GridPane.rowIndex="1" />
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="33.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+                <Image url="http://kivulallo.ddns.net/assignment/volume.png" />
+          </image>
+      </ImageView>
+    </children>
 </AnchorPane>
