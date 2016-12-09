@@ -16,11 +16,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
-import javafx.scene.control.Alert;
-import javafx.beans.binding.StringBinding;
 
 //---------------------
 import javafx.scene.media.Media;
@@ -38,8 +33,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -119,8 +117,6 @@ public class FXMLDocumentController implements Initializable
     private SongLibrary lib = new SongLibrary();
     
     SongManager manager = new SongManager();
-    MediaPlayer mp = null;
-    String songURIPath = "http://www.freexmasmp3.com/files/12-days-funk.mp3";
     
     String currTitle;
     String currAlbum;
@@ -133,30 +129,25 @@ public class FXMLDocumentController implements Initializable
     private ObservableList<String> ol = FXCollections.observableArrayList();
     private final Object obj= new Object();
 
+    MediaPlayer player;
+    String uriString;
+    
+    @FXML
+    private AnchorPane pane;
+    @FXML
+    private ImageView playImage;
+    @FXML
+    private MenuButton menuButton;
+    @FXML
+    private Button btnMute;
     
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+       manager.getAll();
        fillLibTable();
-       txtSearch.setText(songURIPath);
-        try
-        {
-            URI songURI = new URI(songURIPath);
-            mp = new MediaPlayer(new Media(songURI.toString()));
-            bindPlayerToGUI();
-        }
-        catch (URISyntaxException|UnsupportedOperationException ex)
-        {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-            
-            Alert alert = 
-                new Alert(Alert.AlertType.ERROR, 
-                            songURIPath + " not a usable URI" + ex.getMessage()){};
-            alert.show();
-        }
     }
     
-    @FXML
     private void readMetadata(String uriString)
     {
         //-----Reading Metadata--------
@@ -170,7 +161,7 @@ public class FXMLDocumentController implements Initializable
          * fullMetadata has raw metadata, look out for that.
          */
  
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
+        player = new MediaPlayer(new Media(uriString));
         player.setOnReady(new Runnable() {
 
         @Override
@@ -179,7 +170,7 @@ public class FXMLDocumentController implements Initializable
             currTitle =(String) player.getMedia().getMetadata().get("title");
             currAlbum =(String) player.getMedia().getMetadata().get("album");
             currGenre = (String) player.getMedia().getMetadata().get("genre");
-            /*double tmpCurrMinToSec = Math.floor(player.getMedia().durationProperty().getValue().toMinutes() * 60); //Convert Floored minutes to seconds
+            /*double tmpCurrMinToSec = Math.floor(player.getMedia().durationProperty().getValue().toMinutes() * 60 +); //Convert Floored minutes to seconds
             double currDurationMinutes = Math.floor(player.getMedia().durationProperty().getValue().toMinutes()); 
             double currDurationSeconds = Math.floor(player.getMedia().durationProperty().getValue().toSeconds()) - tmpCurrMinToSec;
             String currDuration = currDurationMinutes + ":" + currDurationSeconds;*/
@@ -229,7 +220,6 @@ public class FXMLDocumentController implements Initializable
                     //ObservableList<String> medialist = FXCollections.observableArrayList();
                     //     medialist.addAll(medialist);
                     //System.out.println(medialist);
-
                     System.out.println(currTitle);
                     System.out.println(currAlbum);
                     System.out.println(currArtist);
@@ -257,10 +247,10 @@ public class FXMLDocumentController implements Initializable
         fileChooser.setTitle("Open Music File");
 
         File files = fileChooser.showOpenDialog(stage);
-        String uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
+        uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
         System.out.println(uriString);
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
-        player.play();
+        player = new MediaPlayer(new Media(uriString));
+        //player.play();
         
         readMetadata(uriString);
         
@@ -271,7 +261,7 @@ public class FXMLDocumentController implements Initializable
     }
     
     @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException, URISyntaxException
+    private void handleButtonAction(ActionEvent event) throws IOException
     {
         
         Path currentRelativePath = Paths.get("");
@@ -289,13 +279,10 @@ public class FXMLDocumentController implements Initializable
                 System.out.println(file.getName());
             }
         }
-        URI songURI = new URI(txtSearch.getText());
-        playSong(songURI);
     }
 
 
 
-    @FXML
     private void openNewSong(ActionEvent event) throws IOException {
         /**
          * POPUPS
@@ -461,7 +448,6 @@ public class FXMLDocumentController implements Initializable
         
     }
     
-    @FXML
     private void handleSavePlaylistAction(ActionEvent e)
     {
         //Saves a .playlist file, supposed to save every detail of the playlists
@@ -487,7 +473,6 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
-    @FXML
     public void fillLibTable() {
         ObservableList<Song> songlist = FXCollections.observableArrayList(lib.getSongList());
         //ObservableList<Song> songlist = FXCollections.observableArrayList() ;
@@ -502,64 +487,14 @@ public class FXMLDocumentController implements Initializable
             
             //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
         List<Song> songList = new ArrayList(tblAllSongs.getItems());
+        manager.getAll();
         manager.saveAll(songList);
     }
     
-    private void playSong(URI songURI)
-        {
-          if (mp != null && mp.getStatus() == MediaPlayer.Status.PLAYING)
-        {
-            mp.stop();
-        }
-        try
-        {
-            mp = new MediaPlayer(new Media(songURI.toString()));
-            bindPlayerToGUI();
-            mp.play();
-        }
-        catch (UnsupportedOperationException ex)
-        {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-            
-            Alert alert = 
-                new Alert(Alert.AlertType.ERROR, 
-                            songURIPath + String.format("%n") + ex.getMessage()){};
-            alert.show();
-        }  
-        }
-    
-    private void bindPlayerToGUI()
-    {
-        // Binds the currentTimeProperty to a StringProperty on the label
-        // The computeValue() calculates minutes and seconds from the
-        // CurrentTimeProperty, which is a javafx Duration type.
-        labelcount.textProperty().bind(
-            new StringBinding()
-            {
-                // Initialization block 
-                // Somewhat like a constructor without arguments
-                { 
-                    // Makes the StringBinding listen for changes to 
-                    // the currentTimeProperty
-                    super.bind(mp.currentTimeProperty());
-                }
 
-                @Override
-                protected String computeValue()
-                {
-                    
-                    String form = String.format("%d min ,%d secs", 
-                        TimeUnit.MILLISECONDS.toMinutes((long)mp.getCurrentTime().toMillis()),
-                        TimeUnit.MILLISECONDS.toSeconds((long)mp.getCurrentTime().toMillis()) - 
-                        TimeUnit.MINUTES.toSeconds(
-                            TimeUnit.MILLISECONDS.toMinutes(
-                                (long)mp.getCurrentTime().toMillis()
-                            )
-                        )
-                    );
-                    
-                    return form;
-                }
-            });
+    @FXML
+    private void playMusic(ActionEvent event)
+    {
+        player.play();
     }
 }

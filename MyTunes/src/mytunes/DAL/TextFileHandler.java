@@ -37,7 +37,7 @@ public class TextFileHandler extends FileManager
         for (Song song : songList)
         {
             //csvString += customer.getName() + "," + customer.getEmail() + String.format("%n"); //name + email + format according to system and localization !!
-            csvString += song.getArtist() + "," + song.getTitle() + String.format("%n");
+            csvString += song.getPath() + "," + song.getArtist() + "," + song.getTitle() + "," + song.getGenre() + "," + song.getTime() + String.format("%n");
         }
         
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName)))
@@ -54,7 +54,7 @@ public class TextFileHandler extends FileManager
     @Override
     public List<Song> getAll()
     {
-        List<Song> custList = new ArrayList();
+        List<Song> songlist = new ArrayList();
         
         try(BufferedReader br = new BufferedReader(new FileReader(fileName)))
         {
@@ -68,7 +68,8 @@ public class TextFileHandler extends FileManager
                 //fields[0] is name
                 //fields[1] is email
                 String[] fields = line.split(",");
-                //custList.add(new Song(fields[0].trim(), fields[1].trim()));
+                songlist.add(new Song(fields[0].trim(), fields[1].trim(), "sd", "eqwe", "we"));
+                
                 
             }
         }
@@ -78,7 +79,7 @@ public class TextFileHandler extends FileManager
             System.out.println("Something went horribly wrong..");
         }
         
-        
-        return custList;
+        System.out.println(songlist);
+        return songlist;
     }
 }
