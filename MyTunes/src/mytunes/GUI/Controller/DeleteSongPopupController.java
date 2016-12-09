@@ -11,6 +11,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import mytunes.BE.Song;
+import mytunes.BE.SongLibrary;
 
 /**
  * FXML Controller class
@@ -23,21 +26,30 @@ public class DeleteSongPopupController implements Initializable {
     private Button btnYesDeleteSong;
     @FXML
     private Button btnNoDeleteSong;
+    
+    private Song selected;
+    private SongLibrary libSong = SongLibrary.getInstance();
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
 
     @FXML
     private void deleteSong(ActionEvent event) {
+        libSong.removeSong(selected);
     }
 
     @FXML
     private void cancel(ActionEvent event) {
+        Stage stage = (Stage)btnNoDeleteSong.getScene().getWindow();
+        stage.close();
     }
     
+    public void setSelected(Song selected) {
+        this.selected = selected;
+    }
 }

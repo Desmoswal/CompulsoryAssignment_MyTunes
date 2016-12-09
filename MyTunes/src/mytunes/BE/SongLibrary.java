@@ -6,18 +6,17 @@
 package mytunes.BE;
 
 import java.util.ArrayList;
-import java.io.Serializable;
 
 /**
  *
  * @author KDM
  */
-public class SongLibrary implements Serializable{
-    private ArrayList<Song> songlist = new ArrayList<>();
+public class SongLibrary {
+    private ArrayList<Song> songlist;
+    private static SongLibrary libSong;
     
-    public SongLibrary() {
-        //songlist.add(new Song("../fasz.mp3","Artist","Title","0.00",""));  
-        //songlist.add(new Song("../asd.mp3", "Artist2", "Title2", "0.00",""));
+    private SongLibrary() {
+        this.songlist = new ArrayList<>();
     }
     
     public ArrayList<Song> getSongList() {
@@ -30,5 +29,15 @@ public class SongLibrary implements Serializable{
     
     public void removeSong(Song song) {
         songlist.remove(song);
+    }
+    
+    public static void createInstance() {
+        if(libSong == null) {
+            libSong = new SongLibrary();
+        }
+    }
+    
+    public static SongLibrary getInstance() {
+        return libSong;
     }
 }
