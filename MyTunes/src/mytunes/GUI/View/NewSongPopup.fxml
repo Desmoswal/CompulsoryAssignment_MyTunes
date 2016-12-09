@@ -5,44 +5,44 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.NewSongPopupController">
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.NewSongPopupController">
    <children>
-      <Label layoutX="173.0" layoutY="24.0" text="New song" textAlignment="CENTER">
+      <Label layoutX="173.0" layoutY="24.0" text="New song" textAlignment="CENTER" textFill="#ffee00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="72.0" layoutY="74.0" text="Title:">
+      <Label layoutX="72.0" layoutY="74.0" text="Title:" textFill="#ffee00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="69.0" layoutY="104.0" text="Artist:">
+      <Label layoutX="69.0" layoutY="104.0" text="Artist:" textFill="#ffee00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="67.0" layoutY="133.0" text="Genre:">
+      <Label layoutX="67.0" layoutY="133.0" text="Genre:" textFill="#ffee00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="71.0" layoutY="168.0" text="Time:">
+      <Label layoutX="71.0" layoutY="168.0" text="Time:" textFill="#ffee00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="72.0" layoutY="201.0" text="Path:">
+      <Label layoutX="72.0" layoutY="201.0" text="Path:" textFill="#ffee00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Button fx:id="btnCreate" layoutX="122.0" layoutY="239.0" mnemonicParsing="false" onAction="#createSong" text="Create">
+      <Button fx:id="btnCreate" layoutX="122.0" layoutY="239.0" mnemonicParsing="false" onAction="#createSong" style="-fx-background-color: grey;" text="Create" textFill="#faff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
-      <Button fx:id="btnCancel" layoutX="227.0" layoutY="239.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+      <Button fx:id="btnCancel" layoutX="227.0" layoutY="239.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: grey;" text="Cancel" textFill="#faff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
-      <Label fx:id="labPath" layoutX="134.0" layoutY="201.0" text="PATH" />
-      <Label fx:id="labTime" layoutX="134.0" layoutY="168.0" text="TIME" />
-      <TextField fx:id="txtGenre" layoutX="134.0" layoutY="129.0" />
-      <TextField fx:id="txtArtist" layoutX="134.0" layoutY="100.0" />
-      <TextField fx:id="txtTitle" layoutX="134.0" layoutY="70.0" />
+      <Label fx:id="labPath" layoutX="134.0" layoutY="201.0" text="PATH" textFill="#ffee00" />
+      <Label fx:id="labTime" layoutX="134.0" layoutY="168.0" text="TIME" textFill="#ffee00" />
+      <TextField fx:id="txtGenre" layoutX="134.0" layoutY="129.0" style="-fx-background-color: grey;" />
+      <TextField fx:id="txtArtist" layoutX="134.0" layoutY="100.0" style="-fx-background-color: grey;" />
+      <TextField fx:id="txtTitle" layoutX="134.0" layoutY="70.0" style="-fx-background-color: grey;" />
    </children>
 </AnchorPane>

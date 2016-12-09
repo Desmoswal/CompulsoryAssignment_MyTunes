@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="pane" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.FXMLDocumentController">                  
+<AnchorPane id="pane" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.FXMLDocumentController">                  
     <children>
         <ImageView fitHeight="720.0" fitWidth="1280.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="http://kivulallo.ddns.net/assignment/Mainbg.png" />
             </image>
         </ImageView>
-      <TableView layoutX="905.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0">
+      <TableView layoutX="905.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: black;">
         <columns>
           <TableColumn fx:id="colPlaylistsTitle" prefWidth="120.0" text="Title" />
             <TableColumn fx:id="colPlaylistsSongs" prefWidth="116.0" text="Songs" />
@@ -40,7 +40,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button id="PLAY" fx:id="btnPlay" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                  <Button id="PLAY" fx:id="btnPlay" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -52,7 +52,7 @@
                         </ImageView>
                     </graphic>
                   </Button>
-                  <Button id="PREV" fx:id="btnPrev" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" GridPane.columnIndex="0">
+                  <Button id="PREV" fx:id="btnPrev" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: black;" GridPane.columnIndex="0">
                       <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -61,7 +61,7 @@
                         </ImageView>
                     </graphic>
                     </Button>
-                  <Button id="NEXT" fx:id="btnNext" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                  <Button id="NEXT" fx:id="btnNext" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: black;" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                     <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -74,13 +74,13 @@
             </GridPane>
          </children>
       </GridPane>
-      <TableView fx:id="tblCurPlaylist" layoutX="460.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0">
+      <TableView fx:id="tblCurPlaylist" layoutX="460.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: black;">
         <columns>
           <TableColumn fx:id="colCurPlaylistTitle" prefWidth="171.0" text="Title" />
             <TableColumn fx:id="colCurPlaylistTime" prefWidth="148.0" text="Time" />
         </columns>
       </TableView>
-      <TableView fx:id="tblAllSongs" layoutX="80.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0">
+      <TableView fx:id="tblAllSongs" layoutX="80.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: black;">
         <columns>
             <TableColumn fx:id="colAllSongsArtist" prefWidth="90.0" text="Artist" />
           <TableColumn fx:id="colAllSongsTitle" prefWidth="96.0" text="Title" />
@@ -88,48 +88,48 @@
             <TableColumn fx:id="colAllSongsTime" minWidth="0.0" prefWidth="65.0" text="Time" />
         </columns>
       </TableView>
-      <Button fx:id="btnNewPlaylist" layoutX="80.0" layoutY="648.0" mnemonicParsing="false" onAction="#openNewPlaylist" text="New">
+      <Button fx:id="btnNewPlaylist" layoutX="80.0" layoutY="648.0" mnemonicParsing="false" onAction="#openNewPlaylist" style="-fx-background-color: grey;" text="New" textFill="#ffe100">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnEditPlaylist" layoutX="198.0" layoutY="648.0" mnemonicParsing="false" onAction="#openEditPlaylist" text="Edit">
+      <Button fx:id="btnEditPlaylist" layoutX="198.0" layoutY="648.0" mnemonicParsing="false" onAction="#openEditPlaylist" style="-fx-background-color: grey;" text="Edit" textFill="#ffe500">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnDeletePlaylist" layoutX="312.0" layoutY="648.0" mnemonicParsing="false" onAction="#openDeletePlaylist" text="Delete">
+      <Button fx:id="btnDeletePlaylist" layoutX="312.0" layoutY="648.0" mnemonicParsing="false" onAction="#openDeletePlaylist" style="-fx-background-color: grey;" text="Delete" textFill="#eee306">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnAddToPlaylist" layoutX="800.0" layoutY="244.0" mnemonicParsing="false" text="&lt;&lt; Add">
+      <Button fx:id="btnAddToPlaylist" layoutX="800.0" layoutY="244.0" mnemonicParsing="false" style="-fx-background-color: grey;" text="&lt;&lt; Add" textFill="#eaff00">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnMoveUp" layoutX="460.0" layoutY="648.0" mnemonicParsing="false" onAction="#moveSongUp" text="Up">
+      <Button fx:id="btnMoveUp" layoutX="460.0" layoutY="648.0" mnemonicParsing="false" onAction="#moveSongUp" style="-fx-background-color: grey;" text="Up" textFill="#f2f200">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnMoveDown" layoutX="582.0" layoutY="648.0" mnemonicParsing="false" onAction="#moveSongDown" text="Down">
+      <Button fx:id="btnMoveDown" layoutX="538.0" layoutY="648.0" mnemonicParsing="false" onAction="#moveSongDown" style="-fx-background-color: grey;" text="Down" textFill="#fff200">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnDeleteFromPlaylist" layoutX="693.0" layoutY="648.0" mnemonicParsing="false" onAction="#deleteSongFromPlaylist" text="Delete">
+      <Button fx:id="btnDeleteFromPlaylist" layoutX="693.0" layoutY="648.0" mnemonicParsing="false" onAction="#deleteSongFromPlaylist" style="-fx-background-color: grey;" text="Delete" textFill="#ffff01">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnEditSong" layoutX="1042.0" layoutY="648.0" mnemonicParsing="false" onAction="#openEditSong" text="Edit">
+      <Button fx:id="btnEditSong" layoutX="1042.0" layoutY="648.0" mnemonicParsing="false" onAction="#openEditSong" style="-fx-background-color: grey;" text="Edit" textFill="#f8f000">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnDeleteSong" layoutX="1133.0" layoutY="648.0" mnemonicParsing="false" onAction="#openDeleteSong" text="Delete">
+      <Button fx:id="btnDeleteSong" layoutX="1133.0" layoutY="648.0" mnemonicParsing="false" onAction="#openDeleteSong" style="-fx-background-color: grey;" text="Delete" textFill="#fff200">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
       <Slider fx:id="slideTime" layoutX="473.0" layoutY="74.0" prefHeight="14.0" prefWidth="295.0" />
-      <Label layoutX="484.0" layoutY="44.0" text="Please select a song to play">
+      <Label layoutX="484.0" layoutY="44.0" text="Please select a song to play" textFill="#ffe500">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Label>
-      <Label layoutX="560.0" layoutY="7.0" text="Now playing">
+      <Label layoutX="560.0" layoutY="7.0" text="Now playing" textFill="#f6ff00">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Label>
@@ -143,11 +143,11 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="00:00" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label text="00:00" textFill="#fff200" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font name="Magneto Bold" size="14.0" />
                </font></Label>
-            <Label fx:id="labelcount" prefHeight="18.0" prefWidth="55.0" text="00:00" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label fx:id="labelcount" prefHeight="18.0" prefWidth="55.0" text="00:00" textFill="#eeff00" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font name="Magneto Bold" size="14.0" />
                </font></Label>
@@ -157,30 +157,30 @@
                </font></Label>
          </children>
       </GridPane>
-      <TextField fx:id="txtSearch" layoutX="976.0" layoutY="38.0" prefHeight="36.0" prefWidth="157.0" promptText="Search...">
+      <TextField fx:id="txtSearch" layoutX="976.0" layoutY="38.0" prefHeight="36.0" prefWidth="157.0" promptText="Search..." style="-fx-background-color: grey;">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></TextField>
-      <Button fx:id="btnSearch" layoutX="1139.0" layoutY="38.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Search!!">
+      <Button fx:id="btnSearch" layoutX="1139.0" layoutY="38.0" mnemonicParsing="false" onAction="#handleButtonAction" style="-fx-background-color: grey;" text="Search!!" textFill="#e5ff00">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Label layoutX="187.0" layoutY="139.0" text="Playlists">
+      <Label layoutX="187.0" layoutY="139.0" text="Playlists" textFill="#ffe100">
          <font>
             <Font name="Magneto Bold" size="22.0" />
          </font>
       </Label>
-      <Label layoutX="538.0" layoutY="139.0" text="Songs in playlist">
+      <Label layoutX="538.0" layoutY="139.0" text="Songs in playlist" textFill="YELLOW">
          <font>
             <Font name="Magneto Bold" size="22.0" />
          </font>
       </Label>
-      <Label layoutX="1016.0" layoutY="139.0" text="All songs">
+      <Label layoutX="1016.0" layoutY="139.0" text="All songs" textFill="#ddff00">
          <font>
             <Font name="Magneto Bold" size="22.0" />
          </font>
       </Label>
-      <MenuButton fx:id="menuButton" layoutX="905.0" layoutY="648.0" mnemonicParsing="false" text="New...">
+      <MenuButton fx:id="menuButton" layoutX="905.0" layoutY="648.0" mnemonicParsing="false" style="-fx-background-color: grey;" text="New..." textFill="#ffee00">
         <items>
           <MenuItem fx:id="itemFolder" mnemonicParsing="false" onAction="#openFolder" text="Folder" />
           <MenuItem fx:id="itemFile" mnemonicParsing="false" onAction="#openFile" text="File" />
@@ -189,8 +189,8 @@
             <Font name="Magneto Bold" size="18.0" />
          </font>
       </MenuButton>
-      <Button fx:id="btnMute" layoutX="33.0" layoutY="94.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="Button" GridPane.rowIndex="1" />
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="33.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="btnMute" layoutX="33.0" layoutY="94.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="35.0" style="-fx-background-image: C:\Users\KDM\Desktop\Picktures\mytunes\Originals;" text="Button" GridPane.rowIndex="1" />
+      <ImageView fitHeight="36.0" fitWidth="35.0" layoutX="33.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
           <image>
                 <Image url="http://kivulallo.ddns.net/assignment/volume.png" />
           </image>

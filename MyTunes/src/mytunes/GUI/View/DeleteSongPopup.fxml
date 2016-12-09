@@ -2,26 +2,20 @@
 
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.DeleteSongPopupController">
-   <children> 
-        <ImageView fitHeight="200.0" fitWidth="300.0" layoutX="56.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <image>
-                <Image url="http://kivulallo.ddns.net/assignment/deletesongpop.png" />
-            </image>
-        </ImageView>
-      <Label layoutX="17.0" layoutY="50.0" text="Are you surely want to delete this song?">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.DeleteSongPopupController">
+   <children>
+      <Label layoutX="17.0" layoutY="50.0" text="Are you surely want to delete this song?" textFill="#fff200">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></Label>
-      <Button fx:id="btnYesDeleteSong" layoutX="94.0" layoutY="119.0" mnemonicParsing="false" onAction="#deleteSong" text="Yes">
+      <Button fx:id="btnYesDeleteSong" layoutX="94.0" layoutY="119.0" mnemonicParsing="false" onAction="#deleteSong" style="-fx-background-color: grey;" text="Yes" textFill="#fff200">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
-      <Button fx:id="btnNoDeleteSong" layoutX="169.0" layoutY="119.0" mnemonicParsing="false" onAction="#cancel" text="No">
+      <Button fx:id="btnNoDeleteSong" layoutX="169.0" layoutY="119.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: grey;" text="No" textFill="#fff200">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>

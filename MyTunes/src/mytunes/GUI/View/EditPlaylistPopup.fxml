@@ -2,30 +2,24 @@
 
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="250.0" maxWidth="250.0" prefHeight="250.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.EditPlaylistPopupController">
+<AnchorPane id="AnchorPane" maxHeight="250.0" maxWidth="250.0" prefHeight="250.0" prefWidth="250.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.EditPlaylistPopupController">
    <children>
-       <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-           <image>
-                <Image url="http://kivulallo.ddns.net/assignment/editplaylistpop.png" />
-            </image>
-        </ImageView>
-      <Label layoutX="78.0" layoutY="44.0" text="Edit playlist">
+      <Label layoutX="78.0" layoutY="44.0" text="Edit playlist" textFill="#ffe000">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="27.0" layoutY="87.0" text="Name:">
+      <Label layoutX="27.0" layoutY="87.0" text="Name:" textFill="#ffe000">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Button fx:id="btnEditPlaylistSave" layoutX="99.0" layoutY="166.0" mnemonicParsing="false" onAction="#savePlaylist" text="Save">
+      <Button fx:id="btnEditPlaylistSave" layoutX="99.0" layoutY="166.0" mnemonicParsing="false" onAction="#savePlaylist" style="-fx-background-color: grey;" text="Save" textFill="#ffe000">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
-      <TextField layoutX="77.0" layoutY="84.0" promptText="Name of playlist">
+      <TextField layoutX="77.0" layoutY="84.0" promptText="Name of playlist" style="-fx-background-color: grey;">
          <font>
             <Font name="Magneto Bold" size="12.0" />
          </font></TextField>
