@@ -111,6 +111,16 @@ public class FXMLDocumentController implements Initializable
     private MenuItem itemFolder;
     @FXML
     private MenuItem itemFile;
+    @FXML
+    private AnchorPane pane;
+    @FXML
+    private ImageView playImage;
+    @FXML
+    private MenuButton menuButton;
+    @FXML
+    private Button btnMute;
+    @FXML
+    private TableView<Playlist> tblAllPlaylists;
 
     Stage stage;
     
@@ -128,20 +138,14 @@ public class FXMLDocumentController implements Initializable
     /*fasz*/
     
     private ObservableList<String> ol = FXCollections.observableArrayList();
+    
+    private ObservableList<Song> songlist;
+    private ObservableList<Playlist> playlistlist;
     private final Object obj= new Object();
 
     MediaPlayer player;
     String uriString;
-    
-    @FXML
-    private AnchorPane pane;
-    @FXML
-    private ImageView playImage;
-    @FXML
-    private MenuButton menuButton;
-    @FXML
-    private Button btnMute;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
@@ -149,8 +153,17 @@ public class FXMLDocumentController implements Initializable
        PlaylistLibrary.createInstance();
        libSong = SongLibrary.getInstance();
        libPl = PlaylistLibrary.getInstance();
+       
+       setTableProperties();
+       
+       songlist = FXCollections.observableArrayList(manager.getAll());
+       playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
+       
+       tblAllSongs.setItems(songlist);
+       
+       
+       
        manager.getAll();
-       fillLibTable();
     }
     
     private void readMetadata(String uriString)
@@ -191,7 +204,7 @@ public class FXMLDocumentController implements Initializable
                     obj.wait(10);
                     //System.out.println(currArtist + "afterwait");
                     libSong.addSong(new Song(uriString, currArtist, currTitle, currGenre, "0"));
-                    fillLibTable();
+                    updateSongTable();
                     } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     System.out.println("nem");
@@ -260,9 +273,7 @@ public class FXMLDocumentController implements Initializable
         readMetadata(uriString);
         
         //lib.addSong(new Song(uriString, currArtist, currTitle, "", "0"));
- 
-        
-        //fillLibTable();
+        updateSongTable();
     }
     
     @FXML
@@ -478,24 +489,31 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
-    public void fillLibTable() {
-        ObservableList<Song> songlist = FXCollections.observableArrayList(libSong.getSongList());
-        //ObservableList<Song> songlist = FXCollections.observableArrayList() ;
-        //tblAllSongs.setItems();
+    @FXML
+    public void setTableProperties() {
+        colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
+        colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
+        colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
         
-            colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
-            colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
-            colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
-            tblAllSongs.setItems(songlist);
-            
-    
-            
-            //colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
-        List<Song> songList = new ArrayList(tblAllSongs.getItems());
-        manager.getAll();
-        manager.saveAll(songList);
+        colPlaylistsTitle.setCellValueFactory(new PropertyValueFactory("name"));
+        colPlaylistsSongs.setCellValueFactory(new PropertyValueFactory("size"));
+        colPlaylistsTime.setCellValueFactory(new PropertyValueFactory("alltime"));
     }
     
+    @FXML
+    public void updateSongTable() {
+        colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
+        colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
+        colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
+        tblAllSongs.setItems(songlist);
+        manager.saveAll(songlist);
+    }
+    
+    @FXML
+    public void fillPlaylistTable() {
+        tblAllPlaylists.setItems(playlistlist);
+        //manager.saveAll(playlistlist);
+    }
 
     @FXML
     private void playMusic(ActionEvent event)

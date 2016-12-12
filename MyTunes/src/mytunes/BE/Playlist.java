@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class Playlist {
     private String name;
     private ArrayList<Song> songs;
+    private int size = songs.size();
+    private String alltime = "";
 
     public Playlist(String name, ArrayList<Song> songs)
     {
@@ -25,10 +27,31 @@ public class Playlist {
     {
         return name;
     }
+    
+    public void addSong(Song song) {
+        songs.add(song);
+        size = songs.size();
+    }
+    
+    public void removeSong(Song song) {
+        songs.remove(song);
+    }
+    
+    public int getSize() {
+        return size;
+    }
 
     public ArrayList<Song> getSongs()
     {
         return songs;
+    }
+    
+    private void updateTime() {
+        alltime = "";
+    }
+    
+    public String getAlltime() {
+        return alltime;
     }
  
     

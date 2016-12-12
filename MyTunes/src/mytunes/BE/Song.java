@@ -5,6 +5,8 @@
  */
 package mytunes.BE;
 
+import java.util.UUID;
+
 /**
  *
  * @author Kristof
@@ -15,6 +17,7 @@ public class Song {
     private String title;
     private String time;
     private String genre;
+    private final String uuid;
 
     public Song(String path, String artist, String title, String genre, String time)
     {
@@ -23,9 +26,21 @@ public class Song {
         this.title = title;
         this.time = time;
         this.genre = genre;
+        this.uuid = UUID.randomUUID().toString();
+    }
+    
+    public Song(String path, String artist, String title, String genre, String time, String uuid) {
+        this.path = path;
+        this.artist = artist;
+        this.title = title;
+        this.time = time;
+        this.genre = genre;
+        this.uuid = uuid;
     }
 
-    
+    public String getUUID() {
+        return uuid;
+    }
 
     public String getPath()
     {
