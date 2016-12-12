@@ -15,7 +15,7 @@ public class SongLibrary {
     private ArrayList<Song> songlist;
     private static SongLibrary libSong;
     
-    private SongLibrary() {
+    public SongLibrary() {
         this.songlist = new ArrayList<>();
     }
     
