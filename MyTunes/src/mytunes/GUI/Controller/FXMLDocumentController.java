@@ -505,6 +505,8 @@ public class FXMLDocumentController implements Initializable
         colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
         colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
         colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
+        
+        songlist = FXCollections.observableArrayList(libSong.getSongList());
         tblAllSongs.setItems(songlist);
         manager.saveAll(songlist);
     }

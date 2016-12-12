@@ -68,7 +68,7 @@ public class TextFileHandler extends FileManager
                 //fields[0] is name
                 //fields[1] is email
                 String[] fields = line.split(",");
-                songlist.add(new Song(fields[0].trim(), fields[1].trim(), "sd", "eqwe", "we",fields[5].trim()));
+                songlist.add(new Song(fields[0].trim(), fields[1].trim(), fields[2], fields[3], fields[4],fields[5].trim()));
                 
                 
             }
