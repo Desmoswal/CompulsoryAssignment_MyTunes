@@ -114,7 +114,8 @@ public class FXMLDocumentController implements Initializable
 
     Stage stage;
     
-    private SongLibrary lib = new SongLibrary();
+    private SongLibrary libSong;
+    private PlaylistLibrary libPl;
     
     SongManager manager = new SongManager();
     
@@ -144,6 +145,10 @@ public class FXMLDocumentController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+       SongLibrary.createInstance();
+       PlaylistLibrary.createInstance();
+       libSong = SongLibrary.getInstance();
+       libPl = PlaylistLibrary.getInstance();
        manager.getAll();
        fillLibTable();
     }
@@ -185,7 +190,7 @@ public class FXMLDocumentController implements Initializable
                 try {
                     obj.wait(10);
                     //System.out.println(currArtist + "afterwait");
-                    lib.addSong(new Song(uriString, currArtist, currTitle, currGenre, "0"));
+                    libSong.addSong(new Song(uriString, currArtist, currTitle, currGenre, "0"));
                     fillLibTable();
                     } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
@@ -474,7 +479,7 @@ public class FXMLDocumentController implements Initializable
     }
     
     public void fillLibTable() {
-        ObservableList<Song> songlist = FXCollections.observableArrayList(lib.getSongList());
+        ObservableList<Song> songlist = FXCollections.observableArrayList(libSong.getSongList());
         //ObservableList<Song> songlist = FXCollections.observableArrayList() ;
         //tblAllSongs.setItems();
         
