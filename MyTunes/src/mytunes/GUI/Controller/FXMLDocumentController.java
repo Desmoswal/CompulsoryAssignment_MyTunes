@@ -124,7 +124,7 @@ public class FXMLDocumentController implements Initializable
     String currGenre;
     String currDuration;
     String currFullMetadata;
-    
+    /*fasz*/
     
     private ObservableList<String> ol = FXCollections.observableArrayList();
     private final Object obj= new Object();

@@ -40,7 +40,6 @@ public class NewPlaylistPopupController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        PlaylistLibrary.createInstance();
         libPl = PlaylistLibrary.getInstance();
     }    
 
