@@ -40,7 +40,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button id="PLAY" fx:id="btnPlay" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                  <Button id="PLAY" fx:id="btnPlay" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.halignment="CENTER" onAction="#playMusic" >
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -80,7 +80,7 @@
             <TableColumn fx:id="colCurPlaylistTime" prefWidth="148.0" text="Time" />
         </columns>
       </TableView>
-      <TableView fx:id="tblAllSongs" layoutX="915.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: black;">
+      <TableView fx:id="tblAllSongs" layoutX="915.0" layoutY="188.0" onMousePressed="#mousePressedOnTableView" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: black;">
         <columns>
             <TableColumn fx:id="colAllSongsArtist" prefWidth="90.0" text="Artist" />
           <TableColumn fx:id="colAllSongsTitle" prefWidth="96.0" text="Title" />
@@ -161,7 +161,7 @@
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></TextField>
-      <Button fx:id="btnSearch" layoutX="1139.0" layoutY="38.0" mnemonicParsing="false" onAction="#handleButtonAction" style="-fx-background-color: grey;" text="Search!!" textFill="#e5ff00">
+      <Button fx:id="btnSearch" layoutX="1139.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: grey;" text="Search!!" textFill="#e5ff00">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>

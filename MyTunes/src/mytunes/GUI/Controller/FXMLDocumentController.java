@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
+import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -37,6 +39,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -135,7 +138,6 @@ public class FXMLDocumentController implements Initializable
     String currGenre;
     String currDuration;
     String currFullMetadata;
-    /*fasz*/
     
     private ObservableList<String> ol = FXCollections.observableArrayList();
     
@@ -145,7 +147,7 @@ public class FXMLDocumentController implements Initializable
 
     MediaPlayer player;
     String uriString;
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
@@ -159,11 +161,18 @@ public class FXMLDocumentController implements Initializable
        songlist = FXCollections.observableArrayList(manager.getAll());
        playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
        
+        for (Song song : songlist)
+        {
+            libSong.addSong(song);
+        }
+        
+       songlist = FXCollections.observableArrayList(libSong.getSongList());
        tblAllSongs.setItems(songlist);
        
        
+       //manager.getAll();
        
-       manager.getAll();
+       
     }
     
     private void readMetadata(String uriString)
@@ -273,7 +282,7 @@ public class FXMLDocumentController implements Initializable
         readMetadata(uriString);
         
         //lib.addSong(new Song(uriString, currArtist, currTitle, "", "0"));
-        updateSongTable();
+        //updateSongTable();
     }
     
     @FXML
@@ -297,7 +306,7 @@ public class FXMLDocumentController implements Initializable
         }
     }
 
-
+    
 
     private void openNewSong(ActionEvent event) throws IOException {
         /**
@@ -336,6 +345,7 @@ public class FXMLDocumentController implements Initializable
         
         // Fetches controller from patient view
         EditSongPopupController controller = loader.getController();
+        controller.setController(this);
         
         //controller.setPatient(patient);
         
@@ -346,6 +356,13 @@ public class FXMLDocumentController implements Initializable
         stagePatientView.initModality(Modality.WINDOW_MODAL);
         stagePatientView.initOwner(primStage);
         
+        //-------------------------
+        Song selectedSong = tblAllSongs.getSelectionModel(
+                            ).getSelectedItem();
+        controller.fillFields(selectedSong.getArtist(),selectedSong.getTitle(),selectedSong.getGenre(), selectedSong.getUUID());
+        
+
+        controller.setSelected(selectedSong);
         stagePatientView.show();
     }
     
@@ -387,6 +404,9 @@ public class FXMLDocumentController implements Initializable
         // Fetches controller from patient view
         EditPlaylistPopupController controller = loader.getController();
         
+        controller.setSelected(tblAllPlaylists.getSelectionModel().getSelectedItem());
+        controller.setController(this);
+        
         //controller.setPatient(patient);
         
         // Sets new stage as modal window
@@ -411,6 +431,8 @@ public class FXMLDocumentController implements Initializable
         
         // Fetches controller from patient view
         DeletePlaylistPopupController controller = loader.getController();
+        controller.setSelectedPlaylist(tblAllPlaylists.getSelectionModel().getSelectedItem());
+        controller.setController(this);
         
         //controller.setPatient(patient);
         
@@ -436,6 +458,7 @@ public class FXMLDocumentController implements Initializable
         
         // Fetches controller from patient view
         NewPlaylistPopupController controller = loader.getController();
+        controller.setController(this);
         
         //controller.setPatient(patient);
         
@@ -502,13 +525,62 @@ public class FXMLDocumentController implements Initializable
     
     @FXML
     public void updateSongTable() {
-        colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
-        colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
-        colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
+        /**
+         * THIS IS THE ULTIMATE SOLUTION FOR OUR PROBLEMS
+         * CODING LEVEL OVER 9000
+         */
+        manager.saveAll(songlist);
         
+        for (Song song : songlist)
+        {
+            libSong.removeSong(song);
+        }
+        
+        songlist = FXCollections.observableArrayList(manager.getAll());
+        for(Song song : songlist)
+        {
+            libSong.addSong(song);
+        }
+        manager.saveAll(songlist);
         songlist = FXCollections.observableArrayList(libSong.getSongList());
         tblAllSongs.setItems(songlist);
         manager.saveAll(songlist);
+    }
+    
+    @FXML
+    public void updatePlaylistTable()
+    {
+        colPlaylistsTitle.setCellValueFactory(new PropertyValueFactory("name"));
+        colPlaylistsSongs.setCellValueFactory(new PropertyValueFactory("size"));
+        colPlaylistsTime.setCellValueFactory(new PropertyValueFactory("alltime"));
+        
+        playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
+        tblAllPlaylists.setItems(playlistlist);
+    }
+    
+    private void bindPlayerToGUI()
+    {
+        labelcount.textProperty().bind(
+        new StringBinding()
+                {
+                    {
+                        super.bind(player.currentTimeProperty());
+                }
+                    @Override
+                    protected String computeValue()
+                {
+                    String form = String.format("%d:%d",
+                            TimeUnit.MILLISECONDS.toMinutes((long) player.getCurrentTime().toMillis()),
+                            TimeUnit.MILLISECONDS.toSeconds((long) player.getCurrentTime().toMillis()) - 
+                            TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(
+                                    (long)player.getCurrentTime().toMillis()
+                                )
+                            )
+                    );
+                    return form;
+                }
+                });
     }
     
     @FXML
@@ -520,6 +592,31 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private void playMusic(ActionEvent event)
     {
+        //bindPlayerToGUI();
         player.play();
+    }
+    
+    @FXML
+    private void mousePressedOnTableView(MouseEvent event) throws IOException
+    {
+        // Check double-click left mouse button
+        if(event.isPrimaryButtonDown() && event.getClickCount()==2)
+        {
+            Song selectedSong = tblAllSongs.getSelectionModel(
+                            ).getSelectedItem();
+            String currentURI = selectedSong.getPath();
+
+            player = new MediaPlayer(new Media(currentURI));
+            System.out.println(currentURI);
+            player.play();
+            bindPlayerToGUI();
+            System.out.println(libSong.getSongList());
+        }
+    }
+    
+    @FXML
+    public void printLib()
+    {
+        System.out.println(libSong.getSongList());
     }
 }

@@ -34,7 +34,7 @@ public class NewPlaylistPopupController implements Initializable {
     @FXML
     private Label labNewPlaylistError;
     
-
+    private FXMLDocumentController mainController;
     /**
      * Initializes the controller class.
      */
@@ -48,6 +48,11 @@ public class NewPlaylistPopupController implements Initializable {
         if(!txtNewPlaylistName.getText().isEmpty()) {
             libPl.addPlaylist(new Playlist(txtNewPlaylistName.getText(),new ArrayList<>()));
             
+            if(mainController != null)
+            {
+                mainController.updatePlaylistTable();
+            }
+            
             Stage curStage = (Stage) btnCreatePlaylist.getScene().getWindow();
             curStage.close();
         } else {
@@ -55,4 +60,8 @@ public class NewPlaylistPopupController implements Initializable {
         }
     }
     
+    public void setController(FXMLDocumentController controller)
+    {
+        mainController = controller;
+    }
 }

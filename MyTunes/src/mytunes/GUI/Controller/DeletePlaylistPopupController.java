@@ -11,6 +11,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import mytunes.BE.Playlist;
+import mytunes.BE.PlaylistLibrary;
 
 /**
  * FXML Controller class
@@ -23,6 +26,10 @@ public class DeletePlaylistPopupController implements Initializable {
     private Button btnDeletePlaylistYes;
     @FXML
     private Button btnDeletePlaylistNo;
+    
+    private Playlist selectedPlaylist;
+    private PlaylistLibrary libPl = PlaylistLibrary.getInstance();
+    private FXMLDocumentController mainController;
 
     /**
      * Initializes the controller class.
@@ -33,11 +40,35 @@ public class DeletePlaylistPopupController implements Initializable {
     }    
 
     @FXML
-    private void deletePlaylist(ActionEvent event) {
+    private void deletePlaylist(ActionEvent event) 
+    {
+        if(selectedPlaylist != null)
+        {
+            libPl.removePlaylist(selectedPlaylist);
+        }
+        
+        if(mainController != null)
+        {
+            mainController.updatePlaylistTable();
+        }
+        Stage stage = (Stage) btnDeletePlaylistYes.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
-    private void closeWindow(ActionEvent event) {
+    private void closeWindow(ActionEvent event) 
+    {
+        Stage stage = (Stage) btnDeletePlaylistNo.getScene().getWindow();
+        stage.close();
     }
     
+    public void setSelectedPlaylist(Playlist selectedPlaylist)
+    {
+        this.selectedPlaylist = selectedPlaylist;
+    }
+    
+    public void setController(FXMLDocumentController controller)
+    {
+        mainController = controller;
+    }
 }

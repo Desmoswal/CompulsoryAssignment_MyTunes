@@ -14,13 +14,14 @@ import java.util.ArrayList;
 public class Playlist {
     private String name;
     private ArrayList<Song> songs;
-    private int size = songs.size();
+    private int size;
     private String alltime = "";
 
     public Playlist(String name, ArrayList<Song> songs)
     {
         this.name = name;
         this.songs = songs;
+        this.size = songs.size();
     }
 
     public String getName()
@@ -53,7 +54,9 @@ public class Playlist {
     public String getAlltime() {
         return alltime;
     }
- 
     
-    
+    public void setName(String name)
+    {
+        this.name = name;
+    } 
 }

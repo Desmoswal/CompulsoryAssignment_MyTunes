@@ -65,4 +65,30 @@ public class Song {
     public String getGenre() {
         return genre;
     }
+
+    public void setPath(String path)
+    {
+        this.path = path;
+    }
+
+    public void setArtist(String artist)
+    {
+        this.artist = artist;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public void setTime(String time)
+    {
+        this.time = time;
+    }
+
+    public void setGenre(String genre)
+    {
+        this.genre = genre;
+    }
+    
 }
