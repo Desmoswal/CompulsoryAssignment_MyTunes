@@ -37,10 +37,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import static javafx.scene.media.MediaPlayer.Status.PAUSED;
+import static javafx.scene.media.MediaPlayer.Status.PLAYING;
+import static javafx.scene.media.MediaPlayer.Status.READY;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -124,11 +130,21 @@ public class FXMLDocumentController implements Initializable
     private Button btnMute;
     @FXML
     private TableView<Playlist> tblAllPlaylists;
+    @FXML
+    private ImageView imgMute;
+    @FXML
+    private Label lblNowPlaying;
+    @FXML
+    private RadioButton rbTitle;
+    @FXML
+    private RadioButton rbArtist;
 
     Stage stage;
     
     private SongLibrary libSong;
     private PlaylistLibrary libPl;
+    
+    private Song nowPlaying;
     
     SongManager manager = new SongManager();
     
@@ -169,7 +185,7 @@ public class FXMLDocumentController implements Initializable
        songlist = FXCollections.observableArrayList(libSong.getSongList());
        tblAllSongs.setItems(songlist);
        
-       
+       slideVol.setValue(50);
        //manager.getAll();
        
        
@@ -592,6 +608,17 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private void playMusic(ActionEvent event)
     {
+        Image pause = new Image("http://kivulallo.ddns.net/assignment/pause.png");
+        Image play = new Image("http://kivulallo.ddns.net/assignment/play.png");
+        
+        if(player.getStatus().equals(READY) || player.getStatus().equals(PAUSED)) {
+            playImage.setImage(pause);
+            player.play();
+            lblNowPlaying.setText("szia");
+        } else if(player.getStatus().equals(PLAYING)) {
+            player.pause();
+            playImage.setImage(play);
+        }
         //bindPlayerToGUI();
         player.play();
     }
@@ -618,5 +645,29 @@ public class FXMLDocumentController implements Initializable
     public void printLib()
     {
         System.out.println(libSong.getSongList());
+    }
+    
+    private void setToggleGroupForRadioButtons() {
+        ToggleGroup toggleGroup = new ToggleGroup();
+        rbTitle.setToggleGroup(toggleGroup);
+        rbArtist.setToggleGroup(toggleGroup);
+    }
+    
+    @FXML
+    private void volumeSlider(MouseEvent event) {
+        player.setVolume(slideVol.getValue()/100);
+    }
+    
+    @FXML
+    private void muteButtonAction(ActionEvent event) {
+        Image mute = new Image("http://kivulallo.ddns.net/assignment/mute.png");
+        Image volume = new Image("http://kivulallo.ddns.net/assignment/volume.png");
+        if(player.isMute() == false) {
+            imgMute.setImage(mute);
+            player.setMute(true);
+        } else if(player.isMute() == true) {
+            imgMute.setImage(volume);
+            player.setMute(false);
+        }
     }
 }
