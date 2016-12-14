@@ -150,6 +150,7 @@ public class FXMLDocumentController implements Initializable
     private SongLibrary libSong;
     private PlaylistLibrary libPl;
     
+    
     private Song nowPlaying = null;
     
     SongManager manager = new SongManager();
@@ -173,6 +174,7 @@ public class FXMLDocumentController implements Initializable
     private MediaPlayer loadPlayer;
     String uriString;
     URI uri;
+    private ArrayList<Song> currentPlaylist;
     
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -524,28 +526,13 @@ public class FXMLDocumentController implements Initializable
         
     }
     
-    private void handleSavePlaylistAction(ActionEvent e)
-    {
-        //Saves a .playlist file, supposed to save every detail of the playlists
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Playlist");
-
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Playlist Files", "*.playlist"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-
-        //System.out.println(playlist.getId());
-        File file = fileChooser.showSaveDialog(stage);
-
-        if (file != null)
-        {
-            try
-            {
-                file.createNewFile();
-            } catch (IOException ex)
-            {
-                System.out.println(ex.getMessage());
-            }
+    @FXML
+    private void addSongToPlaylist(ActionEvent event) {
+        if(!tblAllSongs.getSelectionModel().isEmpty() && !tblAllPlaylists.getSelectionModel().isEmpty()) {
+           Playlist selectedPl =  tblAllPlaylists.getSelectionModel().getSelectedItem();
+           Song selectedSong = tblAllSongs.getSelectionModel().getSelectedItem();
+            selectedPl.addSong(selectedSong);
+            updatePlaylistTable();
         }
     }
     
@@ -559,6 +546,9 @@ public class FXMLDocumentController implements Initializable
         colPlaylistsTitle.setCellValueFactory(new PropertyValueFactory("name"));
         colPlaylistsSongs.setCellValueFactory(new PropertyValueFactory("size"));
         colPlaylistsTime.setCellValueFactory(new PropertyValueFactory("alltime"));
+        
+        colCurPlaylistTitle.setCellValueFactory(new PropertyValueFactory("title"));
+        colCurPlaylistTime.setCellValueFactory(new PropertyValueFactory("time"));
     }
     
     @FXML
@@ -567,6 +557,7 @@ public class FXMLDocumentController implements Initializable
          * THIS IS THE ULTIMATE SOLUTION FOR OUR PROBLEMS
          * CODING LEVEL OVER 9000
          */
+        songlist = FXCollections.observableArrayList(libSong.getSongList());
         manager.saveAll(songlist);
         
         for (Song song : songlist)
@@ -588,6 +579,7 @@ public class FXMLDocumentController implements Initializable
     @FXML
     public void updatePlaylistTable()
     {
+        playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
         manager.savePlaylists(playlistlist);
         for(Playlist playlist : playlistlist) {
             libPl.removePlaylist(playlist);
@@ -600,6 +592,10 @@ public class FXMLDocumentController implements Initializable
         playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
         tblAllPlaylists.setItems(playlistlist);
         manager.savePlaylists(playlistlist);
+        
+        if(!tblAllPlaylists.getSelectionModel().isEmpty()) {
+            tblCurPlaylist.setItems(FXCollections.observableArrayList(tblAllPlaylists.getSelectionModel().getSelectedItem().getSongs()));
+        }
     }
     
     private void bindPlayerToLabel()
@@ -665,15 +661,7 @@ public class FXMLDocumentController implements Initializable
         nowPlaying = toPlay;
         player.play();
         lblNowPlaying.setText(nowPlaying.getArtist() + " - " + nowPlaying.getTitle());
-        /*synchronized(obj) {
-            try {
-                obj.wait(10);*/
-                
-            /*}catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-            obj.notify();
-        }*/
+        
         bindPlayerToLabel();
         bindPlayerToSlider();
     }
@@ -701,30 +689,7 @@ public class FXMLDocumentController implements Initializable
             if(!tblAllSongs.getSelectionModel().isEmpty()) {
                 loadPlayer = null;
                 loadPlayer = new MediaPlayer(new Media(tblAllSongs.getSelectionModel().getSelectedItem().getPath()));
-                loadPlayer.setOnPaused(new Runnable() {
-                    public void run() {
-                        Image play = new Image("http://kivulallo.ddns.net/assignment/play.png");
-                        playImage.setImage(play);
-                    }
-                });
-                loadPlayer.setOnPlaying(new Runnable() {
-                    public void run() {
-                        Image pause = new Image("http://kivulallo.ddns.net/assignment/pause.png");
-                        playImage.setImage(pause);
-                        
-                    }
-                });
-                loadPlayer.setOnReady(new Runnable() {
-                   public void run() {
-                        lblDuration.setText(
-                            String.format("%d:%d",
-                            TimeUnit.MILLISECONDS.toMinutes((long) player.getMedia().getDuration().toMillis()),
-                            TimeUnit.MILLISECONDS.toSeconds((long) player.getMedia().getDuration().toMillis()) - TimeUnit.MINUTES.toSeconds(
-                            TimeUnit.MILLISECONDS.toMinutes(
-                            (long)player.getMedia().getDuration().toMillis())))
-                        );
-                   } 
-                });
+                setPlayerProperties(loadPlayer);
             }
             
             if(event.getClickCount()==1) {
@@ -741,9 +706,60 @@ public class FXMLDocumentController implements Initializable
                      player = loadPlayer;
                      play(tblAllSongs.getSelectionModel().getSelectedItem());
                 }
-                //if(player.getStatus().equals(READY)) {
-                    
-                /*} else */if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING)) {
+                
+                if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING)) {
+                    player.stop();
+                    player.dispose();
+                    nowPlaying = null;
+                    player = null;
+                    player = loadPlayer;
+
+                    play(tblAllSongs.getSelectionModel().getSelectedItem());
+                }
+                
+                
+            }
+        }  
+    }
+    
+    @FXML
+    private void mousePressedOnPlaylists(MouseEvent event)
+    {
+        if(event.isPrimaryButtonDown()) {
+            if(!tblAllSongs.getSelectionModel().isEmpty()) {
+                Playlist selectedPlaylist = tblAllPlaylists.getSelectionModel().getSelectedItem();
+                updatePlaylistTable();
+                tblCurPlaylist.setItems(FXCollections.observableArrayList(selectedPlaylist.getSongs()));
+                tblCurPlaylist.refresh();
+            }
+        }  
+    }
+    
+    @FXML
+    private void mousePressedOnCurPlaylist(MouseEvent event) throws IOException
+    {
+        if(event.isPrimaryButtonDown()) {
+            if(!tblCurPlaylist.getSelectionModel().isEmpty()) {
+                loadPlayer = null;
+                loadPlayer = new MediaPlayer(new Media(tblCurPlaylist.getSelectionModel().getSelectedItem().getPath()));
+                setPlayerProperties(loadPlayer);
+            }
+            
+            if(event.getClickCount()==1) {
+                if(!tblCurPlaylist.getSelectionModel().isEmpty()) {
+                    tblAllSongs.getSelectionModel().clearSelection();
+                }
+            }
+            
+            // Check double-click left mouse button
+            if(event.getClickCount()==2){
+                currentPlaylist = (ArrayList<Song>)tblCurPlaylist.getItems();
+                if(player == null) {
+                     player = loadPlayer;
+                     play(tblCurPlaylist.getSelectionModel().getSelectedItem());
+                }
+                
+                if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING)) {
                     player.stop();
                     player.dispose();
                     nowPlaying = null;
@@ -768,6 +784,18 @@ public class FXMLDocumentController implements Initializable
         rbTitle.setToggleGroup(toggleGroup);
         rbArtist.setToggleGroup(toggleGroup);
     }
+    private ObservableList<String> filteredList = FXCollections.observableArrayList();
+    
+    @FXML
+    private void searchClick(ActionEvent event)
+    {
+        if (rbTitle.isSelected())
+        {
+            
+            //colAllSongsTitle.getCellData(nowPlaying)
+        }
+    
+    }
     
     @FXML
     private void volumeSlider(MouseEvent event) {
@@ -787,5 +815,30 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
-    
+    private void setPlayerProperties(MediaPlayer toSet) {
+        toSet.setOnPaused(new Runnable() {
+            public void run() {
+                Image play = new Image("http://kivulallo.ddns.net/assignment/play.png");
+                playImage.setImage(play);
+            }
+        });
+        toSet.setOnPlaying(new Runnable() {
+            public void run() {
+                Image pause = new Image("http://kivulallo.ddns.net/assignment/pause.png");
+                playImage.setImage(pause);
+
+            }
+        });
+        toSet.setOnReady(new Runnable() {
+           public void run() {
+                lblDuration.setText(
+                    String.format("%d:%d",
+                    TimeUnit.MILLISECONDS.toMinutes((long) toSet.getMedia().getDuration().toMillis()),
+                    TimeUnit.MILLISECONDS.toSeconds((long) toSet.getMedia().getDuration().toMillis()) - TimeUnit.MINUTES.toSeconds(
+                    TimeUnit.MILLISECONDS.toMinutes(
+                    (long)toSet.getMedia().getDuration().toMillis())))
+                );
+           } 
+        });
+    }
 }

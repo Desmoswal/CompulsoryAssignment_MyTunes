@@ -13,7 +13,7 @@
                 <Image url="http://kivulallo.ddns.net/assignment/Mainbg.png" />
             </image>
         </ImageView>
-      <TableView fx:id="tblAllPlaylists" layoutX="80.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: yellow;">
+      <TableView onMousePressed="#mousePressedOnPlaylists" fx:id="tblAllPlaylists" layoutX="80.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: yellow;">
         <columns>
           <TableColumn fx:id="colPlaylistsTitle" prefWidth="120.0" text="Title" />
             <TableColumn fx:id="colPlaylistsSongs" prefWidth="116.0" text="Songs" />
@@ -74,7 +74,7 @@
             </GridPane>
          </children>
       </GridPane>
-      <TableView fx:id="tblCurPlaylist" layoutX="460.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: yellow;">
+      <TableView onMousePressed="#mousePressedOnCurPlaylist" fx:id="tblCurPlaylist" layoutX="460.0" layoutY="188.0" prefHeight="440.0" prefWidth="320.0" style="-fx-background-color: grey; -fx-border-color: yellow;">
         <columns>
           <TableColumn fx:id="colCurPlaylistTitle" prefWidth="171.0" text="Title" />
             <TableColumn fx:id="colCurPlaylistTime" prefWidth="148.0" text="Time" />
@@ -100,7 +100,7 @@
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
-      <Button fx:id="btnAddToPlaylist" layoutX="795.0" layoutY="592.0" mnemonicParsing="false" style="-fx-background-color: none; -fx-border-color: yellow;" text="&lt;&lt; Add" textFill="#eaff00">
+      <Button onAction="#addSongToPlaylist" fx:id="btnAddToPlaylist" layoutX="795.0" layoutY="592.0" mnemonicParsing="false" style="-fx-background-color: none; -fx-border-color: yellow;" text="&lt;&lt; Add" textFill="#eaff00">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>

@@ -138,7 +138,7 @@ public class TextFileHandler extends FileManager
                     for (int i = 0; i < fields.length; i++) {
                         if(i!=0 && !libSong.getSongList().isEmpty()) {
                             for (Song song : libSong.getSongList()) {
-                                if(song.getUUID() == fields[i]) {
+                                if(song.getUUID().equals(fields[i])) {
                                     songsInPlaylist.add(song);
                                 }
                             }
