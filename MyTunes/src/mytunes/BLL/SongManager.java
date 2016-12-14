@@ -10,6 +10,7 @@ import mytunes.BE.Song;
 import mytunes.DAL.FileManager;
 import mytunes.DAL.TextFileHandler;
 import java.util.List;
+import mytunes.BE.Playlist;
 
 /**
  *
@@ -27,6 +28,16 @@ public class SongManager
     public List<Song> getAll()
     {
         return fileManager.getAll();
+    }
+    
+    public void savePlaylists(List<Playlist> playList)
+    {
+        fileManager.savePlaylists(playList);
+    }
+    
+    public List<Playlist> getPlaylists()
+    {
+        return fileManager.getPlaylists();
     }
     
 }

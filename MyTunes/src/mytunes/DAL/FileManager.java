@@ -7,6 +7,7 @@ package mytunes.DAL;
 
 import mytunes.BE.Song;
 import java.util.List;
+import mytunes.BE.Playlist;
 
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public abstract class FileManager
 {
-    protected String fileName = "songLibrary";
+    //protected String fileName = "songLibrary";
     
     public FileManager()
     {
@@ -25,4 +26,8 @@ public abstract class FileManager
     public abstract void saveAll(List<Song> songList);
     
     public abstract List<Song> getAll(); 
+    
+    public abstract void savePlaylists (List<Playlist> playList);
+    
+    public abstract List<Playlist> getPlaylists(); 
 }

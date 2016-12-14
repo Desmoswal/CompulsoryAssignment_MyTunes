@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mytunes.BE.Playlist;
 
 /**
  *
@@ -27,7 +28,7 @@ public class TextFileHandler extends FileManager
 {
     public TextFileHandler()
     {
-        fileName = fileName + ".txt";
+        //fileName = fileName + ".txt";
     }
     
     @Override
@@ -40,7 +41,7 @@ public class TextFileHandler extends FileManager
             csvString += song.getPath() + "," + song.getArtist() + "," + song.getTitle() + "," + song.getGenre() + "," + song.getTime() + "," + song.getUUID() + String.format("%n");
         }
         
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName)))
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter("SongLibrary.txt")))
         {
             bw.write(csvString);
         } 
@@ -56,7 +57,7 @@ public class TextFileHandler extends FileManager
     {
         List<Song> songlist = new ArrayList();
         
-        try(BufferedReader br = new BufferedReader(new FileReader(fileName)))
+        try(BufferedReader br = new BufferedReader(new FileReader("SongLibrary.txt")))
         {
             Scanner scanner = new Scanner(br);
             
@@ -81,5 +82,60 @@ public class TextFileHandler extends FileManager
         
         System.out.println(songlist);
         return songlist;
+    }
+    
+    @Override
+    public void savePlaylists(List<Playlist> playList)
+    {
+        String csvString = "";
+        for (Playlist playlist : playList)
+        {
+            //csvString += customer.getName() + "," + customer.getEmail() + String.format("%n"); //name + email + format according to system and localization !!
+            //csvString += song.getPath() + "," + song.getArtist() + "," + song.getTitle() + "," + song.getGenre() + "," + song.getTime() + "," + song.getUUID() + String.format("%n");
+            csvString += playlist.getName() + "," + playlist.getSongs();
+        }
+        
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter("PlaylistLibrary.txt")))
+        {
+            bw.write(csvString);
+        } 
+        
+        catch (IOException ex)
+        {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public List<Playlist> getPlaylists()
+    {
+        List<Playlist> playList = new ArrayList();
+        
+        try(BufferedReader br = new BufferedReader(new FileReader("PlaylistLibrary.txt")))
+        {
+            Scanner scanner = new Scanner(br);
+            
+            while(scanner.hasNext())
+            {
+                //Gets next line in file
+                String line = scanner.nextLine();
+                //Separates line into array by comma
+                //fields[0] is name
+                //fields[1] is email
+                String[] fields = line.split(",");
+                
+                //songlist.add(new Song(fields[0].trim(), fields[1].trim(), fields[2], fields[3], fields[4],Integer.parseInt(fields[5].trim())));
+                //playList.add(new Playlist("String",songs));
+                
+            }
+        }
+        
+        catch(IOException ioe)
+        {
+            System.out.println("Something went horribly wrong..");
+        }
+        
+        System.out.println(playList);
+        return playList;
     }
 }
