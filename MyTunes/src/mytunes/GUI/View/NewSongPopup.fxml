@@ -31,18 +31,18 @@
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Button fx:id="btnCreate" layoutX="122.0" layoutY="239.0" mnemonicParsing="false" onAction="#createSong" style="-fx-background-color: grey;" text="Create" textFill="#faff00">
+      <Button fx:id="btnCreate" layoutX="122.0" layoutY="239.0" mnemonicParsing="false" onAction="#createSong" style="-fx-background-color: none; -fx-border-color: yellow;" text="Create" textFill="#faff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
-      <Button fx:id="btnCancel" layoutX="227.0" layoutY="239.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: grey;" text="Cancel" textFill="#faff00">
+      <Button fx:id="btnCancel" layoutX="227.0" layoutY="239.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: none; -fx-border-color: yellow;" text="Cancel" textFill="#faff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
       <Label fx:id="labPath" layoutX="134.0" layoutY="201.0" text="PATH" textFill="#ffee00" />
       <Label fx:id="labTime" layoutX="134.0" layoutY="168.0" text="TIME" textFill="#ffee00" />
-      <TextField fx:id="txtGenre" layoutX="134.0" layoutY="129.0" style="-fx-background-color: grey;" />
-      <TextField fx:id="txtArtist" layoutX="134.0" layoutY="100.0" style="-fx-background-color: grey;" />
-      <TextField fx:id="txtTitle" layoutX="134.0" layoutY="70.0" style="-fx-background-color: grey;" />
+      <TextField fx:id="txtGenre" layoutX="134.0" layoutY="129.0" style="-fx-background-color: grey; -fx-border-color: yellow;" />
+      <TextField fx:id="txtArtist" layoutX="134.0" layoutY="100.0" style="-fx-background-color: grey; -fx-border-color: yellow;" />
+      <TextField fx:id="txtTitle" layoutX="134.0" layoutY="70.0" style="-fx-background-color: grey; -fx-border-color: yellow;" />
    </children>
 </AnchorPane>

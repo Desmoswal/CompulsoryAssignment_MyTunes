@@ -15,7 +15,7 @@
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Button fx:id="btnEditPlaylistSave" layoutX="99.0" layoutY="166.0" mnemonicParsing="false" onAction="#savePlaylist" style="-fx-background-color: grey;" text="Save" textFill="#ffe000">
+      <Button fx:id="btnEditPlaylistSave" layoutX="99.0" layoutY="166.0" mnemonicParsing="false" onAction="#savePlaylist" style="-fx-background-color: none; -fx-border-color: yellow;" text="Save" textFill="#ffe000">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>

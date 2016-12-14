@@ -7,15 +7,15 @@
 
 <AnchorPane id="AnchorPane" prefHeight="266.0" prefWidth="377.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.GUI.Controller.EditSongPopupController">
    <children>
-      <Label layoutX="72.0" layoutY="43.0" text="Title:" textAlignment="RIGHT" textFill="#f6ff00">
+      <Label layoutX="66.0" layoutY="43.0" text="Title:" textAlignment="RIGHT" textFill="#f6ff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="65.0" layoutY="85.0" text="Artist:" textAlignment="RIGHT" textFill="#f6ff00">
+      <Label layoutX="58.0" layoutY="85.0" text="Artist:" textAlignment="RIGHT" textFill="#f6ff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="67.0" layoutY="129.0" text="Genre:" textAlignment="RIGHT" textFill="#f6ff00">
+      <Label layoutX="60.0" layoutY="129.0" text="Genre:" textAlignment="RIGHT" textFill="#f6ff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Label>
@@ -26,11 +26,11 @@
       <TextField fx:id="txtTitle" layoutX="115.0" layoutY="39.0" style="-fx-background-color: grey;" />
       <TextField fx:id="txtArtist" layoutX="115.0" layoutY="81.0" style="-fx-background-color: grey;" />
       <TextField fx:id="txtGenre" layoutX="116.0" layoutY="125.0" style="-fx-background-color: grey;" />
-      <Button fx:id="btnSave" layoutX="96.0" layoutY="190.0" mnemonicParsing="false" onAction="#saveSong" style="-fx-background-color: grey;" text="Save" textFill="#f6ff00">
+      <Button fx:id="btnSave" layoutX="96.0" layoutY="190.0" mnemonicParsing="false" onAction="#saveSong" style="-fx-background-color: none; -fx-border-color: yellow;" text="Save" textFill="#f6ff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
-      <Button fx:id="btnCancel" layoutX="238.0" layoutY="190.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: grey;" text="Cancel" textFill="#f6ff00">
+      <Button fx:id="btnCancel" layoutX="238.0" layoutY="190.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: none; -fx-border-color: yellow;" text="Cancel" textFill="#f6ff00">
          <font>
             <Font name="Magneto Bold" size="14.0" />
          </font></Button>
