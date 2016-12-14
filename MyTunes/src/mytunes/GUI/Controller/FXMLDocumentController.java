@@ -572,12 +572,18 @@ public class FXMLDocumentController implements Initializable
     @FXML
     public void updatePlaylistTable()
     {
-        colPlaylistsTitle.setCellValueFactory(new PropertyValueFactory("name"));
-        colPlaylistsSongs.setCellValueFactory(new PropertyValueFactory("size"));
-        colPlaylistsTime.setCellValueFactory(new PropertyValueFactory("alltime"));
-        
+        manager.savePlaylists(playlistlist);
+        for(Playlist playlist : playlistlist) {
+            libPl.removePlaylist(playlist);
+        }
+        playlistlist = FXCollections.observableArrayList(manager.getPlaylists());
+        for(Playlist playlist : playlistlist) {
+            libPl.addPlaylist(playlist);
+        }
+        manager.savePlaylists();
         playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
         tblAllPlaylists.setItems(playlistlist);
+        manager.savePlaylists();
     }
     
     private void bindPlayerToLabel()
