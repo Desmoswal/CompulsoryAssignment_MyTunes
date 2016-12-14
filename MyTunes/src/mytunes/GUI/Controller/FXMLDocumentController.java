@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.*;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.TimeUnit;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -47,9 +49,11 @@ import javafx.scene.layout.AnchorPane;
 import static javafx.scene.media.MediaPlayer.Status.PAUSED;
 import static javafx.scene.media.MediaPlayer.Status.PLAYING;
 import static javafx.scene.media.MediaPlayer.Status.READY;
+import static javafx.scene.media.MediaPlayer.Status.UNKNOWN;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import mytunes.BE.*;
 import mytunes.BLL.SongManager;
 
@@ -77,7 +81,7 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private Button btnNext;
     @FXML
-    private TableView<SongLibrary> tblCurPlaylist;
+    private TableView<Song> tblCurPlaylist;
     @FXML
     private TableColumn<Song, String> colCurPlaylistTitle;
     @FXML
@@ -138,13 +142,15 @@ public class FXMLDocumentController implements Initializable
     private RadioButton rbTitle;
     @FXML
     private RadioButton rbArtist;
+    @FXML
+    private Label lblDuration;
 
     Stage stage;
     
     private SongLibrary libSong;
     private PlaylistLibrary libPl;
     
-    private Song nowPlaying;
+    private Song nowPlaying = null;
     
     SongManager manager = new SongManager();
     
@@ -160,9 +166,13 @@ public class FXMLDocumentController implements Initializable
     private ObservableList<Song> songlist;
     private ObservableList<Playlist> playlistlist;
     private final Object obj= new Object();
-
-    MediaPlayer player;
+    
+    Path curRelPath = Paths.get("");
+    
+    private MediaPlayer player;
+    private MediaPlayer loadPlayer;
     String uriString;
+    URI uri;
     
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -185,10 +195,8 @@ public class FXMLDocumentController implements Initializable
        songlist = FXCollections.observableArrayList(libSong.getSongList());
        tblAllSongs.setItems(songlist);
        
-       slideVol.setValue(50);
+       slideVol.setValue(100);
        //manager.getAll();
-       
-       
     }
     
     private void readMetadata(String uriString)
@@ -203,21 +211,20 @@ public class FXMLDocumentController implements Initializable
          * OR using fullMetadata which gets everything.
          * fullMetadata has raw metadata, look out for that.
          */
- 
-        player = new MediaPlayer(new Media(uriString));
-        player.setOnReady(new Runnable() {
+        MediaPlayer tempPlayer = new MediaPlayer(new Media(uriString));
+        tempPlayer.setOnReady(new Runnable() {
 
         @Override
         public void run() {
-            currArtist =(String) player.getMedia().getMetadata().get("artist");
-            currTitle =(String) player.getMedia().getMetadata().get("title");
-            currAlbum =(String) player.getMedia().getMetadata().get("album");
-            currGenre = (String) player.getMedia().getMetadata().get("genre");
+            currArtist =(String) tempPlayer.getMedia().getMetadata().get("artist");
+            currTitle =(String) tempPlayer.getMedia().getMetadata().get("title");
+            currAlbum =(String) tempPlayer.getMedia().getMetadata().get("album");
+            currGenre = (String) tempPlayer.getMedia().getMetadata().get("genre");
             /*double tmpCurrMinToSec = Math.floor(player.getMedia().durationProperty().getValue().toMinutes() * 60 +); //Convert Floored minutes to seconds
             double currDurationMinutes = Math.floor(player.getMedia().durationProperty().getValue().toMinutes()); 
             double currDurationSeconds = Math.floor(player.getMedia().durationProperty().getValue().toSeconds()) - tmpCurrMinToSec;
             String currDuration = currDurationMinutes + ":" + currDurationSeconds;*/
-            currFullMetadata =(String) player.getMedia().getMetadata().toString();
+            currFullMetadata =(String) tempPlayer.getMedia().getMetadata().toString();
             
             
             ol.add(currArtist);
@@ -270,8 +277,6 @@ public class FXMLDocumentController implements Initializable
                     
                                 
         });*/
-        
-        
     }
     
     @FXML
@@ -292,11 +297,10 @@ public class FXMLDocumentController implements Initializable
         File files = fileChooser.showOpenDialog(stage);
         uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
         System.out.println(uriString);
-        player = new MediaPlayer(new Media(uriString));
+        //player = new MediaPlayer(new Media(uriString));
         //player.play();
         
         readMetadata(uriString);
-        
         //lib.addSong(new Song(uriString, currArtist, currTitle, "", "0"));
         //updateSongTable();
     }
@@ -394,6 +398,8 @@ public class FXMLDocumentController implements Initializable
         
         // Fetches controller from patient view
         DeleteSongPopupController controller = loader.getController();
+        controller.setSelected(tblAllSongs.getSelectionModel().getSelectedItem());
+        controller.setController(this);
         
         //controller.setPatient(patient);
         
@@ -574,17 +580,17 @@ public class FXMLDocumentController implements Initializable
         tblAllPlaylists.setItems(playlistlist);
     }
     
-    private void bindPlayerToGUI()
+    private void bindPlayerToLabel()
     {
         labelcount.textProperty().bind(
         new StringBinding()
                 {
                     {
                         super.bind(player.currentTimeProperty());
-                }
+                    }
                     @Override
                     protected String computeValue()
-                {
+                    {
                     String form = String.format("%d:%d",
                             TimeUnit.MILLISECONDS.toMinutes((long) player.getCurrentTime().toMillis()),
                             TimeUnit.MILLISECONDS.toSeconds((long) player.getCurrentTime().toMillis()) - 
@@ -593,10 +599,37 @@ public class FXMLDocumentController implements Initializable
                                     (long)player.getCurrentTime().toMillis()
                                 )
                             )
-                    );
-                    return form;
+                        );
+                        return form;
+                    }
                 }
-                });
+        );
+        
+    }
+    
+    private void bindPlayerToSlider() {
+        slideTime.valueProperty().bind(
+            new ObjectBinding<Double>() {
+            {
+                super.bind(player.currentTimeProperty());
+            }
+                @Override
+                protected Double computeValue() {
+                    return player.getCurrentTime().toSeconds()/player.getMedia().getDuration().toSeconds()*100;
+                }
+            });
+    }
+    
+    @FXML
+    private void seekTime(MouseEvent event) {
+        Duration seektime = Duration.millis(player.getMedia().getDuration().toMillis()*(slideTime.getValue()/100));
+        player.seek(seektime);
+        bindPlayerToSlider();
+    }
+    
+    @FXML
+    private void unBindSlider(MouseEvent event) {
+        slideTime.valueProperty().unbind();
     }
     
     @FXML
@@ -604,43 +637,104 @@ public class FXMLDocumentController implements Initializable
         tblAllPlaylists.setItems(playlistlist);
         //manager.saveAll(playlistlist);
     }
+    
+    
+    private void play(Song toPlay) {
+        nowPlaying = toPlay;
+        player.play();
+        lblNowPlaying.setText(nowPlaying.getArtist() + " - " + nowPlaying.getTitle());
+        /*synchronized(obj) {
+            try {
+                obj.wait(10);*/
+                
+            /*}catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+            obj.notify();
+        }*/
+        bindPlayerToLabel();
+        bindPlayerToSlider();
+    }
 
     @FXML
     private void playMusic(ActionEvent event)
     {
-        Image pause = new Image("http://kivulallo.ddns.net/assignment/pause.png");
-        Image play = new Image("http://kivulallo.ddns.net/assignment/play.png");
+        if(player == null) {
+            player = loadPlayer;
+        }
         
-        if(player.getStatus().equals(READY) || player.getStatus().equals(PAUSED)) {
-            playImage.setImage(pause);
+        if(player.getStatus().equals(READY)) {
+            play(tblAllSongs.getSelectionModel().getSelectedItem());
+        } else if(player.getStatus().equals(PAUSED)) {
             player.play();
-            lblNowPlaying.setText("szia");
         } else if(player.getStatus().equals(PLAYING)) {
             player.pause();
-            playImage.setImage(play);
         }
-        //bindPlayerToGUI();
-        player.play();
     }
     
     @FXML
     private void mousePressedOnTableView(MouseEvent event) throws IOException
     {
-        // Check double-click left mouse button
-        if(event.isPrimaryButtonDown() && event.getClickCount()==2)
-        {
-            Song selectedSong = tblAllSongs.getSelectionModel(
-                            ).getSelectedItem();
-            String currentURI = selectedSong.getPath();
+        if(event.isPrimaryButtonDown()) {
+            if(!tblAllSongs.getSelectionModel().isEmpty()) {
+                loadPlayer = null;
+                loadPlayer = new MediaPlayer(new Media(tblAllSongs.getSelectionModel().getSelectedItem().getPath()));
+                loadPlayer.setOnPaused(new Runnable() {
+                    public void run() {
+                        Image play = new Image("http://kivulallo.ddns.net/assignment/play.png");
+                        playImage.setImage(play);
+                    }
+                });
+                loadPlayer.setOnPlaying(new Runnable() {
+                    public void run() {
+                        Image pause = new Image("http://kivulallo.ddns.net/assignment/pause.png");
+                        playImage.setImage(pause);
+                        
+                    }
+                });
+                loadPlayer.setOnReady(new Runnable() {
+                   public void run() {
+                        lblDuration.setText(
+                            String.format("%d:%d",
+                            TimeUnit.MILLISECONDS.toMinutes((long) player.getMedia().getDuration().toMillis()),
+                            TimeUnit.MILLISECONDS.toSeconds((long) player.getMedia().getDuration().toMillis()) - TimeUnit.MINUTES.toSeconds(
+                            TimeUnit.MILLISECONDS.toMinutes(
+                            (long)player.getMedia().getDuration().toMillis())))
+                        );
+                   } 
+                });
+            }
+            
+            if(event.getClickCount()==1) {
+                if(!tblAllSongs.getSelectionModel().isEmpty()) {
+                    tblCurPlaylist.getSelectionModel().clearSelection();
+                } else if(!tblCurPlaylist.getSelectionModel().isEmpty()) {
+                    tblAllSongs.getSelectionModel().clearSelection();
+                }
+            }
+            
+            // Check double-click left mouse button
+            if(event.getClickCount()==2){
+                if(player == null) {
+                     player = loadPlayer;
+                     play(tblAllSongs.getSelectionModel().getSelectedItem());
+                }
+                //if(player.getStatus().equals(READY)) {
+                    
+                /*} else */if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING)) {
+                    player.stop();
+                    player.dispose();
+                    nowPlaying = null;
+                    player = null;
+                    player = loadPlayer;
 
-            player = new MediaPlayer(new Media(currentURI));
-            System.out.println(currentURI);
-            player.play();
-            bindPlayerToGUI();
-            System.out.println(libSong.getSongList());
-        }
+                    play(tblAllSongs.getSelectionModel().getSelectedItem());
+                }
+                
+                
+            }
+        }  
     }
-    
     @FXML
     public void printLib()
     {
@@ -670,4 +764,6 @@ public class FXMLDocumentController implements Initializable
             player.setMute(false);
         }
     }
+    
+    
 }

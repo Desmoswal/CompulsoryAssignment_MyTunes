@@ -42,7 +42,13 @@ public class Song {
         this.title = title;
         this.time = time;
         this.genre = genre;
-        this.uuid = uuid;
+        //this.uuid = uuid;
+        if(libSong.getSongList().size() == 0) {
+            this.uuid = 0;
+            System.out.println("something went wrong");
+        } else {
+            this.uuid = libSong.getSongList().size();
+        }
     }
 
     public int getUUID() {
