@@ -48,7 +48,7 @@ public class NewPlaylistPopupController implements Initializable {
     @FXML
     private void createPlaylist(ActionEvent event) {
         if(!txtNewPlaylistName.getText().isEmpty()) {
-            libPl.addPlaylist(new Playlist(txtNewPlaylistName.getText(),libSong.getSongList()));
+            libPl.addPlaylist(new Playlist(txtNewPlaylistName.getText(),new ArrayList<>()));
             
             if(mainController != null)
             {

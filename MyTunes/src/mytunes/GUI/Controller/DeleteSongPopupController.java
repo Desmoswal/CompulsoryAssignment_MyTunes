@@ -27,9 +27,9 @@ public class DeleteSongPopupController implements Initializable {
     @FXML
     private Button btnNoDeleteSong;
     
-    private Song selected;
+    private Song selectedSong;
     private SongLibrary libSong = SongLibrary.getInstance();
-    private FXMLDocumentController mainCon;
+    private FXMLDocumentController mainController;
 
     /**
      * Initializes the controller class.
@@ -41,8 +41,13 @@ public class DeleteSongPopupController implements Initializable {
 
     @FXML
     private void deleteSong(ActionEvent event) {
-        //libSong.getSongList().remove(selected.getUUID());
-        //mainCon.updateSongTable();
+        if(selectedSong != null)
+            libSong.removeSong(selectedSong);
+        if(mainController != null)
+        {
+            mainController.updateSongTable();
+            mainController.updatePlaylistTable();
+        }
         Stage stage = (Stage)btnNoDeleteSong.getScene().getWindow();
         stage.close();
     }
@@ -54,10 +59,10 @@ public class DeleteSongPopupController implements Initializable {
     }
     
     public void setSelected(Song selected) {
-        this.selected = selected;
+        this.selectedSong = selected;
     }
     
     public void setController(FXMLDocumentController con) {
-        this.mainCon = con;
+        this.mainController = con;
     }
 }

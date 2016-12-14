@@ -121,15 +121,9 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private Button btnSearch;
     @FXML
-    private MenuItem itemFolder;
-    @FXML
-    private MenuItem itemFile;
-    @FXML
     private AnchorPane pane;
     @FXML
     private ImageView playImage;
-    @FXML
-    private MenuButton menuButton;
     @FXML
     private Button btnMute;
     @FXML
@@ -146,13 +140,9 @@ public class FXMLDocumentController implements Initializable
     private Label lblDuration;
 
     Stage stage;
-    
     private SongLibrary libSong;
     private PlaylistLibrary libPl;
-    
-    
     private Song nowPlaying = null;
-    
     SongManager manager = new SongManager();
     
     String currTitle;
@@ -163,18 +153,15 @@ public class FXMLDocumentController implements Initializable
     String currFullMetadata;
     
     private ObservableList<String> ol = FXCollections.observableArrayList();
-    
     private ObservableList<Song> songlist;
     private ObservableList<Playlist> playlistlist;
     private final Object obj= new Object();
-    
-    Path curRelPath = Paths.get("");
-    
     private MediaPlayer player;
     private MediaPlayer loadPlayer;
+    private TableView<Song> playingFrom;
     String uriString;
     URI uri;
-    private ArrayList<Song> currentPlaylist;
+    private ArrayList<Song> currentPlaylist = new ArrayList<>();
     
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -294,12 +281,6 @@ public class FXMLDocumentController implements Initializable
                     
                                 
         });*/
-    }
-    
-    @FXML
-    private void openFolder(ActionEvent event)
-    {
-    
     }
     
     @FXML
@@ -513,26 +494,71 @@ public class FXMLDocumentController implements Initializable
 
     @FXML
     private void moveSongUp(ActionEvent event) {
-        
+        if(!tblCurPlaylist.getSelectionModel().isEmpty())
+        {
+            Song selectedSong = tblCurPlaylist.getSelectionModel().getSelectedItem();
+            Playlist selectedPlaylist = tblAllPlaylists.getSelectionModel().getSelectedItem();
+            int currentUp = selectedPlaylist.getSongs().indexOf(selectedSong);
+            if(currentUp > 0) {
+                Song toMove = selectedPlaylist.getSongs().get(currentUp);
+                Song temp = selectedPlaylist.getSongs().get(selectedPlaylist.getSongs().indexOf(selectedSong) - 1);
+                selectedPlaylist.getSongs().set(currentUp - 1, toMove);
+                selectedPlaylist.getSongs().set(currentUp, temp);
+            }
+            updatePlaylistTable();
+            tblAllPlaylists.getSelectionModel().select(selectedPlaylist);
+            tblCurPlaylist.setItems(FXCollections.observableArrayList((tblAllPlaylists.getSelectionModel().getSelectedItem()).getSongs()));
+            tblCurPlaylist.refresh();
+        }
     }
     
     @FXML
     private void moveSongDown(ActionEvent event) {
-        
+        if(!tblCurPlaylist.getSelectionModel().isEmpty())
+        {
+            Song selectedSong = tblCurPlaylist.getSelectionModel().getSelectedItem();
+            Playlist selectedPlaylist = tblAllPlaylists.getSelectionModel().getSelectedItem();
+            int currentUp = selectedPlaylist.getSongs().indexOf(selectedSong);
+            if(currentUp+1 <= selectedPlaylist.getSongs().size()) {
+                Song toMove = selectedPlaylist.getSongs().get(currentUp);
+                Song temp = selectedPlaylist.getSongs().get(selectedPlaylist.getSongs().indexOf(selectedSong) + 1);
+                selectedPlaylist.getSongs().set(currentUp + 1, toMove);
+                selectedPlaylist.getSongs().set(currentUp, temp);
+            }
+            updatePlaylistTable();
+            tblAllPlaylists.getSelectionModel().select(selectedPlaylist);
+            tblCurPlaylist.setItems(FXCollections.observableArrayList((tblAllPlaylists.getSelectionModel().getSelectedItem()).getSongs()));
+            tblCurPlaylist.refresh();
+        }
     }
     
     @FXML
     private void deleteSongFromPlaylist(ActionEvent event) {
-        
+        if(!tblCurPlaylist.getSelectionModel().isEmpty())
+        {
+            Song selectedSong = tblCurPlaylist.getSelectionModel().getSelectedItem();
+            Playlist selectedPlaylist = tblAllPlaylists.getSelectionModel().getSelectedItem();
+            selectedPlaylist.removeSong(selectedSong);
+            
+            updatePlaylistTable();
+            tblAllPlaylists.getSelectionModel().select(selectedPlaylist);
+            tblCurPlaylist.setItems(FXCollections.observableArrayList((tblAllPlaylists.getSelectionModel().getSelectedItem()).getSongs()));
+            tblCurPlaylist.refresh();
+        }
     }
     
     @FXML
     private void addSongToPlaylist(ActionEvent event) {
-        if(!tblAllSongs.getSelectionModel().isEmpty() && !tblAllPlaylists.getSelectionModel().isEmpty()) {
-           Playlist selectedPl =  tblAllPlaylists.getSelectionModel().getSelectedItem();
-           Song selectedSong = tblAllSongs.getSelectionModel().getSelectedItem();
-            selectedPl.addSong(selectedSong);
+        if(!tblAllSongs.getSelectionModel().isEmpty() && !tblAllPlaylists.getSelectionModel().isEmpty())
+        {
+            Playlist selectedPlaylist = tblAllPlaylists.getSelectionModel().getSelectedItem();
+            Song selectedSong = tblAllSongs.getSelectionModel().getSelectedItem();
+            selectedPlaylist.addSong(selectedSong);
+            System.out.println(selectedPlaylist.getSongs());
             updatePlaylistTable();
+            tblAllPlaylists.getSelectionModel().select(selectedPlaylist);
+            tblCurPlaylist.setItems(FXCollections.observableArrayList((tblAllPlaylists.getSelectionModel().getSelectedItem()).getSongs()));
+            tblCurPlaylist.refresh();
         }
     }
     
@@ -593,9 +619,9 @@ public class FXMLDocumentController implements Initializable
         tblAllPlaylists.setItems(playlistlist);
         manager.savePlaylists(playlistlist);
         
-        if(!tblAllPlaylists.getSelectionModel().isEmpty()) {
+        /*if(!tblAllPlaylists.getSelectionModel().isEmpty()) {
             tblCurPlaylist.setItems(FXCollections.observableArrayList(tblAllPlaylists.getSelectionModel().getSelectedItem().getSongs()));
-        }
+        }*/
     }
     
     private void bindPlayerToLabel()
@@ -669,12 +695,31 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private void playMusic(ActionEvent event)
     {
+        if(loadPlayer != null) {
+            setPlayerProperties(loadPlayer);
+        }
         if(player == null) {
             player = loadPlayer;
+            
+            currentPlaylist = new ArrayList<>();
+            for(Song song : playingFrom.getItems()) {
+                currentPlaylist.add(song);
+            }
+            int start = currentPlaylist.indexOf(playingFrom.getSelectionModel().getSelectedItem());
+            
+            play(currentPlaylist.get(start));
         }
         
         if(player.getStatus().equals(READY)) {
-            play(tblAllSongs.getSelectionModel().getSelectedItem());
+            
+            currentPlaylist = new ArrayList<>();
+            for(Song song : tblAllSongs.getItems()) {
+                currentPlaylist.add(song);
+            }
+
+            int start = currentPlaylist.indexOf(tblAllSongs.getSelectionModel().getSelectedItem());
+            play(currentPlaylist.get(start));
+            //play(playingFrom.getSelectionModel().getSelectedItem());
         } else if(player.getStatus().equals(PAUSED)) {
             player.play();
         } else if(player.getStatus().equals(PLAYING)) {
@@ -685,93 +730,149 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private void mousePressedOnTableView(MouseEvent event) throws IOException
     {
-        if(event.isPrimaryButtonDown()) {
-            if(!tblAllSongs.getSelectionModel().isEmpty()) {
+        if(event.isPrimaryButtonDown())
+        {
+            if(!tblAllSongs.getSelectionModel().isEmpty())
+            {
+                playingFrom = tblAllSongs;
                 loadPlayer = null;
-                loadPlayer = new MediaPlayer(new Media(tblAllSongs.getSelectionModel().getSelectedItem().getPath()));
+                loadPlayer = new MediaPlayer(new Media((tblAllSongs.getSelectionModel().getSelectedItem()).getPath()));
                 setPlayerProperties(loadPlayer);
+                loadPlayer.setOnEndOfMedia(new Runnable() {
+                    public void run()
+                    {
+                        if(currentPlaylist.indexOf(nowPlaying) != currentPlaylist.size() - 1)
+                        {
+                            Song nextsong = currentPlaylist.get(currentPlaylist.indexOf(nowPlaying) + 1);
+                            loadPlayer = new MediaPlayer(new Media(nextsong.getPath()));
+                            setPlayerProperties(loadPlayer);
+                            player.stop();
+                            player.dispose();
+                            player = null;
+                            nowPlaying = null;
+                            player = loadPlayer;
+                            
+                            play(nextsong);
+                        }
+                    }
+                });
+            }
+            if(event.getClickCount() == 1 && !tblAllSongs.getSelectionModel().isEmpty()) {
+                tblCurPlaylist.getSelectionModel().clearSelection();
             }
             
-            if(event.getClickCount()==1) {
-                if(!tblAllSongs.getSelectionModel().isEmpty()) {
-                    tblCurPlaylist.getSelectionModel().clearSelection();
-                } else if(!tblCurPlaylist.getSelectionModel().isEmpty()) {
-                    tblAllSongs.getSelectionModel().clearSelection();
-                }
-            }
-            
-            // Check double-click left mouse button
-            if(event.getClickCount()==2){
-                if(player == null) {
-                     player = loadPlayer;
-                     play(tblAllSongs.getSelectionModel().getSelectedItem());
+            if(event.getClickCount() == 2)
+            {
+                if(player == null)
+                {
+                    player = loadPlayer;
+                    
+                    currentPlaylist = new ArrayList<>();
+                    for(Song song : tblAllSongs.getItems()) {
+                        currentPlaylist.add(song);
+                    }
+
+                    int start = currentPlaylist.indexOf(tblAllSongs.getSelectionModel().getSelectedItem());
+                    play(currentPlaylist.get(start));
                 }
                 
-                if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING)) {
+                if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING))
+                {
                     player.stop();
                     player.dispose();
                     nowPlaying = null;
                     player = null;
                     player = loadPlayer;
-
-                    play(tblAllSongs.getSelectionModel().getSelectedItem());
+                    
+                    currentPlaylist = new ArrayList<>();
+                    for(Song song : tblAllSongs.getItems()) {
+                        currentPlaylist.add(song);
+                    }
+                    
+                    int start = currentPlaylist.indexOf(tblAllSongs.getSelectionModel().getSelectedItem());
+                    play(currentPlaylist.get(start));
                 }
-                
-                
             }
-        }  
+        }
     }
     
     @FXML
-    private void mousePressedOnPlaylists(MouseEvent event)
-    {
+    private void mousePressedOnPlaylist(MouseEvent event) {
         if(event.isPrimaryButtonDown()) {
-            if(!tblAllSongs.getSelectionModel().isEmpty()) {
-                Playlist selectedPlaylist = tblAllPlaylists.getSelectionModel().getSelectedItem();
-                updatePlaylistTable();
-                tblCurPlaylist.setItems(FXCollections.observableArrayList(selectedPlaylist.getSongs()));
-                tblCurPlaylist.refresh();
+            if(event.getClickCount() == 1) {
+                if(!tblAllPlaylists.getSelectionModel().isEmpty()) {
+                    Playlist selectedPlaylist = tblAllPlaylists.getSelectionModel().getSelectedItem();
+                    tblCurPlaylist.setItems(FXCollections.observableArrayList(selectedPlaylist.getSongs()));
+                }
             }
-        }  
+        }
     }
     
     @FXML
     private void mousePressedOnCurPlaylist(MouseEvent event) throws IOException
     {
-        if(event.isPrimaryButtonDown()) {
-            if(!tblCurPlaylist.getSelectionModel().isEmpty()) {
+        if(event.isPrimaryButtonDown())
+        {
+            if(!tblCurPlaylist.getSelectionModel().isEmpty())
+            {
+                playingFrom = tblCurPlaylist;
                 loadPlayer = null;
-                loadPlayer = new MediaPlayer(new Media(tblCurPlaylist.getSelectionModel().getSelectedItem().getPath()));
+                loadPlayer = new MediaPlayer(new Media((tblCurPlaylist.getSelectionModel().getSelectedItem()).getPath()));
                 setPlayerProperties(loadPlayer);
-            }
-            
-            if(event.getClickCount()==1) {
-                if(!tblCurPlaylist.getSelectionModel().isEmpty()) {
-                    tblAllSongs.getSelectionModel().clearSelection();
+                loadPlayer.setOnEndOfMedia(new Runnable() {
+
+                    public void run()
+                    {
+                        if(currentPlaylist.indexOf(nowPlaying) != currentPlaylist.size() - 1)
+                        {
+                            Song nextsong = (Song)currentPlaylist.get(currentPlaylist.indexOf(nowPlaying) + 1);
+                            loadPlayer = new MediaPlayer(new Media(nextsong.getPath()));
+                            setPlayerProperties(loadPlayer);
+                            player.stop();
+                            player.dispose();
+                            player = null;
+                            nowPlaying = null;
+                            player = loadPlayer;
+                            
+                            play(nextsong);
+                        }
+                    }
                 }
+);
             }
-            
-            // Check double-click left mouse button
-            if(event.getClickCount()==2){
-                currentPlaylist = (ArrayList<Song>)tblCurPlaylist.getItems();
-                if(player == null) {
-                     player = loadPlayer;
-                     play(tblCurPlaylist.getSelectionModel().getSelectedItem());
+            if(event.getClickCount() == 1 && !tblCurPlaylist.getSelectionModel().isEmpty())
+                tblAllSongs.getSelectionModel().clearSelection();
+            if(event.getClickCount() == 2)
+            {
+                if(player == null)
+                {
+                    player = loadPlayer;
+                    
+                    currentPlaylist = new ArrayList<>();
+                    for(Song song : tblCurPlaylist.getItems()) {
+                        currentPlaylist.add(song);
+                    }
+                    int start = currentPlaylist.indexOf(tblCurPlaylist.getSelectionModel().getSelectedItem());
+                    play(currentPlaylist.get(start));
                 }
                 
-                if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING)) {
+                if(player.getStatus().equals(PAUSED) || player.getStatus().equals(PLAYING))
+                {
                     player.stop();
                     player.dispose();
                     nowPlaying = null;
                     player = null;
                     player = loadPlayer;
-
-                    play(tblAllSongs.getSelectionModel().getSelectedItem());
+                    
+                    currentPlaylist = new ArrayList<>();
+                    for(Song song : tblCurPlaylist.getItems()) {
+                        currentPlaylist.add(song);
+                    }
+                    int start = currentPlaylist.indexOf(tblCurPlaylist.getSelectionModel().getSelectedItem());
+                    play(currentPlaylist.get(start));
                 }
-                
-                
             }
-        }  
+        }
     }
     @FXML
     public void printLib()
@@ -822,6 +923,7 @@ public class FXMLDocumentController implements Initializable
                 playImage.setImage(play);
             }
         });
+        
         toSet.setOnPlaying(new Runnable() {
             public void run() {
                 Image pause = new Image("http://kivulallo.ddns.net/assignment/pause.png");
@@ -829,6 +931,7 @@ public class FXMLDocumentController implements Initializable
 
             }
         });
+        
         toSet.setOnReady(new Runnable() {
            public void run() {
                 lblDuration.setText(
@@ -840,5 +943,49 @@ public class FXMLDocumentController implements Initializable
                 );
            } 
         });
+        toSet.setOnStalled(new Runnable() {
+            public void run() {
+                Image play = new Image("http://kivulallo.ddns.net/assignment/play.png");
+                playImage.setImage(play);
+            }
+        });
+    }
+    
+    @FXML
+    private void nextSong(ActionEvent event)
+    {
+        if(currentPlaylist != null) {
+            if(currentPlaylist.indexOf(nowPlaying) != currentPlaylist.size() - 1) {
+                Song nextsong = currentPlaylist.get(currentPlaylist.indexOf(nowPlaying) + 1);
+                loadPlayer = new MediaPlayer(new Media(nextsong.getPath()));
+                setPlayerProperties(loadPlayer);
+                player.stop();
+                player.dispose();
+                player = null;
+                nowPlaying = null;
+                player = loadPlayer;
+                
+                play(nextsong);
+            }
+        }
+    }
+    
+    @FXML
+    private void prevSong(ActionEvent event)
+    {
+        if(currentPlaylist != null) {
+            if(currentPlaylist.indexOf(nowPlaying) > 0) {
+                Song nextsong = currentPlaylist.get(currentPlaylist.indexOf(nowPlaying) - 1);
+                loadPlayer = new MediaPlayer(new Media(nextsong.getPath()));
+                setPlayerProperties(loadPlayer);
+                player.stop();
+                player.dispose();
+                player = null;
+                nowPlaying = null;
+                player = loadPlayer;
+                
+                play(nextsong);
+            }
+        }
     }
 }
