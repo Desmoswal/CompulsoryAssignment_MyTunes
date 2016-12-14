@@ -184,8 +184,8 @@ public class FXMLDocumentController implements Initializable
        
        setTableProperties();
        
+       //-------Setting up Songlist
        songlist = FXCollections.observableArrayList(manager.getAll());
-       playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
        
         for (Song song : songlist)
         {
@@ -194,6 +194,17 @@ public class FXMLDocumentController implements Initializable
         
        songlist = FXCollections.observableArrayList(libSong.getSongList());
        tblAllSongs.setItems(songlist);
+       
+       //------Setting up Playlist
+       playlistlist = FXCollections.observableArrayList(manager.getPlaylists());
+       
+       for(Playlist playlist : playlistlist)
+       {
+           libPl.addPlaylist(playlist);
+       }
+       
+       playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
+       tblAllPlaylists.setItems(playlistlist);
        
        slideVol.setValue(100);
        //manager.getAll();
@@ -225,6 +236,10 @@ public class FXMLDocumentController implements Initializable
             double currDurationSeconds = Math.floor(player.getMedia().durationProperty().getValue().toSeconds()) - tmpCurrMinToSec;
             String currDuration = currDurationMinutes + ":" + currDurationSeconds;*/
             currFullMetadata =(String) tempPlayer.getMedia().getMetadata().toString();
+            String songTime = String.format("%d:%d",
+                    TimeUnit.MILLISECONDS.toMinutes((long) tempPlayer.getMedia().getDuration().toMillis()),
+                    TimeUnit.MILLISECONDS.toSeconds((long) tempPlayer.getMedia().getDuration().toMillis()) - TimeUnit.MINUTES.toSeconds(
+                    TimeUnit.MILLISECONDS.toMinutes((long)tempPlayer.getMedia().getDuration().toMillis())));
             
             
             ol.add(currArtist);
@@ -235,7 +250,7 @@ public class FXMLDocumentController implements Initializable
                 try {
                     obj.wait(10);
                     //System.out.println(currArtist + "afterwait");
-                    libSong.addSong(new Song(uriString, currArtist, currTitle, currGenre, "0"));
+                    libSong.addSong(new Song(uriString, currArtist, currTitle, currGenre, songTime));
                     updateSongTable();
                     } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
@@ -539,6 +554,7 @@ public class FXMLDocumentController implements Initializable
         colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
         colAllSongsTitle.setCellValueFactory(new PropertyValueFactory("title"));
         colAllSongsGenre.setCellValueFactory(new PropertyValueFactory("genre"));
+        colAllSongsTime.setCellValueFactory(new PropertyValueFactory("time"));
         
         colPlaylistsTitle.setCellValueFactory(new PropertyValueFactory("name"));
         colPlaylistsSongs.setCellValueFactory(new PropertyValueFactory("size"));
@@ -580,10 +596,10 @@ public class FXMLDocumentController implements Initializable
         for(Playlist playlist : playlistlist) {
             libPl.addPlaylist(playlist);
         }
-        manager.savePlaylists();
+        manager.savePlaylists(playlistlist);
         playlistlist = FXCollections.observableArrayList(libPl.getPlaylists());
         tblAllPlaylists.setItems(playlistlist);
-        manager.savePlaylists();
+        manager.savePlaylists(playlistlist);
     }
     
     private void bindPlayerToLabel()

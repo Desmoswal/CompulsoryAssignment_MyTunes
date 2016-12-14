@@ -17,7 +17,7 @@ public class Song {
     private String title;
     private String time;
     private String genre;
-    private final int uuid;
+    private final String uuid;
     
     private SongLibrary libSong = SongLibrary.getInstance();
 
@@ -28,30 +28,19 @@ public class Song {
         this.title = title;
         this.time = time;
         this.genre = genre;
-        if(libSong.getSongList().size() == 0) {
-            this.uuid = 0;
-            System.out.println("something went wrong");
-        } else {
-            this.uuid = libSong.getSongList().size();
-        }
+        this.uuid = UUID.randomUUID().toString();
     }
     
-    public Song(String path, String artist, String title, String genre, String time, int uuid) {
+    public Song(String path, String artist, String title, String genre, String time, String uuid) {
         this.path = path;
         this.artist = artist;
         this.title = title;
         this.time = time;
         this.genre = genre;
-        //this.uuid = uuid;
-        if(libSong.getSongList().size() == 0) {
-            this.uuid = 0;
-            System.out.println("something went wrong");
-        } else {
-            this.uuid = libSong.getSongList().size();
-        }
+        this.uuid = uuid;
     }
 
-    public int getUUID() {
+    public String getUUID() {
         return uuid;
     }
 

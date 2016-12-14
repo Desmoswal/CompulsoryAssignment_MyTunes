@@ -36,7 +36,7 @@ public class EditSongPopupController implements Initializable {
 
     
     private Stage curStage;
-    private int uuid;
+    private String uuid;
     
     private SongLibrary libSong;
     
@@ -53,7 +53,7 @@ public class EditSongPopupController implements Initializable {
     }    
     
     @FXML
-    public void fillFields(String artist, String title, String genre, int uuid)
+    public void fillFields(String artist, String title, String genre, String uuid)
     {
         txtArtist.setText(artist);
         txtTitle.setText(title);

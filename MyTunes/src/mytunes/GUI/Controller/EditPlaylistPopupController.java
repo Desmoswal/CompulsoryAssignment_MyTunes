@@ -52,23 +52,20 @@ public class EditPlaylistPopupController implements Initializable {
     @FXML
     private void savePlaylist(ActionEvent event) 
     {
-        Playlist empty = new Playlist("", new ArrayList<Song>());
         selectedPlaylist = libPl.getPlaylists().get(libPl.getPlaylists().indexOf(selectedPlaylist));
         selectedPlaylist.setName(txtEditPlaylistName.getText());
         
+        if(mainController != null)
+        {
+            mainController.updatePlaylistTable();
+        }
+        if(mainController != null)
+        {
+            mainController.updatePlaylistTable();
+        }
+        
         Stage stage = (Stage) txtEditPlaylistName.getScene().getWindow();
         stage.close();
-        
-        libPl.addPlaylist(empty);
-        if(mainController != null)
-        {
-            mainController.updatePlaylistTable();
-        }
-        libPl.removePlaylist(empty);
-        if(mainController != null)
-        {
-            mainController.updatePlaylistTable();
-        }
     }
     
     public void setController(FXMLDocumentController controller)

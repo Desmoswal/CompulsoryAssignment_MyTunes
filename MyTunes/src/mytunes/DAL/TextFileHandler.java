@@ -26,6 +26,7 @@ import mytunes.BE.Playlist;
  */
 public class TextFileHandler extends FileManager
 {
+    
     public TextFileHandler()
     {
         //fileName = fileName + ".txt";
@@ -69,7 +70,7 @@ public class TextFileHandler extends FileManager
                 //fields[0] is name
                 //fields[1] is email
                 String[] fields = line.split(",");
-                songlist.add(new Song(fields[0].trim(), fields[1].trim(), fields[2], fields[3], fields[4],Integer.parseInt(fields[5].trim())));
+                songlist.add(new Song(fields[0].trim(), fields[1].trim(), fields[2], fields[3], fields[4],fields[5].trim()));
                 
                 
             }
@@ -92,7 +93,11 @@ public class TextFileHandler extends FileManager
         {
             //csvString += customer.getName() + "," + customer.getEmail() + String.format("%n"); //name + email + format according to system and localization !!
             //csvString += song.getPath() + "," + song.getArtist() + "," + song.getTitle() + "," + song.getGenre() + "," + song.getTime() + "," + song.getUUID() + String.format("%n");
-            csvString += playlist.getName() + "," + playlist.getSongs();
+            csvString += playlist.getName();
+            for(Song song : playlist.getSongs()) {
+                csvString += "," + song.getUUID(); 
+            }
+            csvString += String.format("%n");
         }
         
         try(BufferedWriter bw = new BufferedWriter(new FileWriter("PlaylistLibrary.txt")))
@@ -109,7 +114,8 @@ public class TextFileHandler extends FileManager
     @Override
     public List<Playlist> getPlaylists()
     {
-        List<Playlist> playList = new ArrayList();
+        SongLibrary libSong = SongLibrary.getInstance();
+        List<Playlist> playList = new ArrayList<>();
         
         try(BufferedReader br = new BufferedReader(new FileReader("PlaylistLibrary.txt")))
         {
@@ -125,8 +131,22 @@ public class TextFileHandler extends FileManager
                 String[] fields = line.split(",");
                 
                 //songlist.add(new Song(fields[0].trim(), fields[1].trim(), fields[2], fields[3], fields[4],Integer.parseInt(fields[5].trim())));
-                //playList.add(new Playlist("String",songs));
-                
+                if(fields.length == 1) {
+                    playList.add(new Playlist(fields[0],new ArrayList<>()));
+                } else {
+                    ArrayList<Song> songsInPlaylist = new ArrayList<>();
+                    for (int i = 0; i < fields.length; i++) {
+                        if(i!=0 && !libSong.getSongList().isEmpty()) {
+                            for (Song song : libSong.getSongList()) {
+                                if(song.getUUID() == fields[i]) {
+                                    songsInPlaylist.add(song);
+                                }
+                            }
+                            
+                        }
+                    }
+                    playList.add(new Playlist(fields[0],songsInPlaylist));
+                }
             }
         }
         

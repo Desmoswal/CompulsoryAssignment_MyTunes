@@ -26,6 +26,7 @@ import mytunes.BE.PlaylistLibrary;
  */
 public class NewPlaylistPopupController implements Initializable {
     PlaylistLibrary libPl;
+    SongLibrary libSong;
 
     @FXML
     private Button btnCreatePlaylist;
@@ -41,12 +42,13 @@ public class NewPlaylistPopupController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         libPl = PlaylistLibrary.getInstance();
+        libSong = SongLibrary.getInstance();
     }    
 
     @FXML
     private void createPlaylist(ActionEvent event) {
         if(!txtNewPlaylistName.getText().isEmpty()) {
-            libPl.addPlaylist(new Playlist(txtNewPlaylistName.getText(),new ArrayList<>()));
+            libPl.addPlaylist(new Playlist(txtNewPlaylistName.getText(),libSong.getSongList()));
             
             if(mainController != null)
             {
