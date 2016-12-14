@@ -125,7 +125,7 @@
             <Font name="Magneto Bold" size="18.0" />
          </font></Button>
       <Slider fx:id="slideTime" layoutX="473.0" layoutY="74.0" onMousePressed="#unBindSlider" onMouseReleased="#seekTime" prefHeight="14.0" prefWidth="295.0" />
-      <Label fx:id="lblNowPlaying" layoutX="484.0" layoutY="44.0" text="Please select a song to play" textFill="#ffe500">
+      <Label fx:id="lblNowPlaying" alignment="CENTER" contentDisplay="CENTER" layoutX="369.0" layoutY="44.0" prefHeight="24.0" prefWidth="489.0" text="Please select a song to play" textAlignment="CENTER" textFill="#ffe500">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></Label>
@@ -151,13 +151,13 @@
                <font>
                   <Font name="Magneto Bold" size="14.0" />
                </font></Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="/" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="/" textFill="#f9ff00" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font name="Magneto Bold" size="14.0" />
                </font></Label>
          </children>
       </GridPane>
-      <TextField fx:id="txtSearch" layoutX="976.0" layoutY="38.0" prefHeight="36.0" prefWidth="157.0" promptText="Search..." style="-fx-background-color: none; -fx-border-color: yellow;">
+      <TextField fx:id="txtSearch" layoutX="976.0" layoutY="38.0" prefHeight="36.0" prefWidth="157.0" promptText="Search..." style="-fx-background-color: grey; -fx-border-color: yellow;">
          <font>
             <Font name="Magneto Bold" size="18.0" />
          </font></TextField>
