@@ -8,7 +8,8 @@ package mytunes.BE;
 import java.util.ArrayList;
 
 /**
- *
+ *  Contains an ArrayList of songs
+ * Every song is going to be added to this library
  * @author KDM
  */
 public class SongLibrary {

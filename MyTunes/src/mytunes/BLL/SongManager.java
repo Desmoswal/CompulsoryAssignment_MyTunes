@@ -13,7 +13,8 @@ import java.util.List;
 import mytunes.BE.Playlist;
 
 /**
- *
+ *  Connected to the BusinessEntities and to the Data Access Layer
+ * and helps saving and reading from files.
  * @author Desmoswal
  */
 public class SongManager

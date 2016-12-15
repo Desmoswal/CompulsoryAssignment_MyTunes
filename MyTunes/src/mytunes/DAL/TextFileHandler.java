@@ -13,25 +13,24 @@ import java.util.logging.Logger;
 import mytunes.BE.*;
 
 /**
- *
+ *  Comma separated saving and reading
  * @author Desmoswal
  */
 public class TextFileHandler extends FileManager
 {
     
-    public TextFileHandler()
-    {
-        //fileName = fileName + ".txt";
-    }
-    
+    /**
+     * Saves every song in the songLibrary
+     * @param songList 
+     */
     @Override
     public void saveAll(List<Song> songList)
     {
         String csvString = "";
         for (Song song : songList)
         {
-            //csvString += customer.getName() + "," + customer.getEmail() + String.format("%n"); //name + email + format according to system and localization !!
-            csvString += song.getPath() + "," + song.getArtist() + "," + song.getTitle() + "," + song.getGenre() + "," + song.getTime() + "," + song.getUUID() + String.format("%n");
+            
+            csvString += song.getPath() + "," + song.getArtist() + "," + song.getTitle() + "," + song.getGenre() + "," + song.getTime() + "," + song.getUUID() + String.format("%n");//save info and format according to system and localization
         }
         
         try(BufferedWriter bw = new BufferedWriter(new FileWriter("SongLibrary.txt")))
@@ -45,6 +44,10 @@ public class TextFileHandler extends FileManager
         }
     }
     
+    /**
+     * Reads every line from song library
+     * @return 
+     */
     @Override
     public List<Song> getAll()
     {
@@ -59,8 +62,8 @@ public class TextFileHandler extends FileManager
                 //Gets next line in file
                 String line = scanner.nextLine();
                 //Separates line into array by comma
-                //fields[0] is name
-                //fields[1] is email
+                //fields[0] is path
+                //fields[1] is artist
                 String[] fields = line.split(",");
                 songlist.add(new Song(fields[0].trim(), fields[1].trim(), fields[2], fields[3], fields[4],fields[5].trim()));
                 
@@ -70,21 +73,25 @@ public class TextFileHandler extends FileManager
         
         catch(IOException ioe)
         {
-            System.out.println("Something went horribly wrong..");
+            System.out.println("Something went horribly wrong during reading from SongLibrary.txt");
         }
         
         System.out.println(songlist);
         return songlist;
     }
     
+    /**
+     * Comma separated saving of playlists
+     * Gets every song in every playlist
+     * @param playList 
+     */
     @Override
     public void savePlaylists(List<Playlist> playList)
     {
         String csvString = "";
         for (Playlist playlist : playList)
         {
-            //csvString += customer.getName() + "," + customer.getEmail() + String.format("%n"); //name + email + format according to system and localization !!
-            //csvString += song.getPath() + "," + song.getArtist() + "," + song.getTitle() + "," + song.getGenre() + "," + song.getTime() + "," + song.getUUID() + String.format("%n");
+            
             csvString += playlist.getName();
             for(Song song : playlist.getSongs()) {
                 csvString += "," + song.getUUID(); 
@@ -103,6 +110,10 @@ public class TextFileHandler extends FileManager
         }
     }
     
+    /**
+     * Reads every Playlist from PlaylistLibrary.txt
+     * @return 
+     */
     @Override
     public List<Playlist> getPlaylists()
     {
@@ -119,10 +130,10 @@ public class TextFileHandler extends FileManager
                 String line = scanner.nextLine();
                 //Separates line into array by comma
                 //fields[0] is name
-                //fields[1] is email
+                //fields[1] is Songs
                 String[] fields = line.split(",");
                 
-                //songlist.add(new Song(fields[0].trim(), fields[1].trim(), fields[2], fields[3], fields[4],Integer.parseInt(fields[5].trim())));
+                
                 if(fields.length == 1) {
                     playList.add(new Playlist(fields[0],new ArrayList<>()));
                 } else {
@@ -144,7 +155,7 @@ public class TextFileHandler extends FileManager
         
         catch(IOException ioe)
         {
-            System.out.println("Something went horribly wrong..");
+            System.out.println("Something went horribly wrong during reading from PlaylistLibrary.txt");
         }
         
         System.out.println(playList);

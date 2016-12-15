@@ -8,7 +8,10 @@ package mytunes.BE;
 import java.util.UUID;
 
 /**
- *
+ *  Song class contains information about single songs
+ * such as path, artist, title, time, genre and uuid.
+ * 
+ * Also contains every getter and setter method.
  * @author Kristof
  */
 public class Song {

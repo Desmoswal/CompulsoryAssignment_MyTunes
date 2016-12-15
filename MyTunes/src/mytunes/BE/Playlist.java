@@ -8,7 +8,8 @@ package mytunes.BE;
 import java.util.ArrayList;
 
 /**
- *
+ * Stores every detail of the playlist
+ * It has every get and set method
  * @author Kristof
  */
 public class Playlist {

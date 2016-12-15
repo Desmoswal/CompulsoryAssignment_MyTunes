@@ -11,12 +11,11 @@ import mytunes.BE.Playlist;
 
 
 /**
- *
+ *  Abstract class which helps dealing with saving and reading song libraries and playlists
  * @author Desmoswal
  */
 public abstract class FileManager
 {
-    //protected String fileName = "songLibrary";
     
     public FileManager()
     {

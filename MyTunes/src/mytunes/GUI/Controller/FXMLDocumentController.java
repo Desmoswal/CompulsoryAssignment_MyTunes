@@ -63,7 +63,7 @@ import mytunes.BLL.SongManager;
  */
 public class FXMLDocumentController implements Initializable
 {
-
+    //All of the FXML variables in not more than 140 lines :)
     @FXML
     private Label labelcount;
     @FXML
@@ -140,38 +140,42 @@ public class FXMLDocumentController implements Initializable
     private Label lblDuration;
 
     Stage stage;
-    private SongLibrary libSong;
-    private PlaylistLibrary libPl;
-    private Song nowPlaying = null;
-    SongManager manager = new SongManager();
+    private SongLibrary libSong; //the SongLibrary which is the virtual copy of our textfile
+    private PlaylistLibrary libPl; //the PlaylistLibrary is also the virtual copy of our textfile
+    private Song nowPlaying = null; //this is for displaying artist/title, and to check the last item of the actual playlist
+    SongManager manager = new SongManager(); //the BLL layer
     
-    String currTitle;
-    String currAlbum;
-    String currArtist;
-    String currGenre;
-    String currDuration;
-    String currFullMetadata;
-    
+    /*
+    * These should have been the variables of metadata but it gets emptied after run() is finished inside readMetadata()
+    */
+    private String currTitle;
+    private String currAlbum;
+    private String currArtist;
+    private String currGenre;
+    private String currDuration;
+    private String currFullMetadata;
     private ObservableList<String> ol = FXCollections.observableArrayList();
-    private ObservableList<Song> songlist;
-    private ObservableList<Playlist> playlistlist;
-    private final Object obj= new Object();
-    private MediaPlayer player;
-    private MediaPlayer loadPlayer;
-    private TableView<Song> playingFrom;
-    String uriString;
-    URI uri;
-    private ArrayList<Song> currentPlaylist = new ArrayList<>();
+    
+    private ObservableList<Song> songlist; //the main "songlist" which contains the SongLibrary (and used for fill the library when it's being read from file.)
+    private ObservableList<Playlist> playlistlist; //the main list of playlists which contains the PlaylistLibrary (and used for fill the library when it's being read from file.)
+    private final Object obj= new Object(); //just to have an object which we can wait with (this is for readMetadata() to sync threads)
+    private MediaPlayer player; //our main mediaplayer.
+    private MediaPlayer loadPlayer; //our "loading" mediaplayer. the songs are getting loaded into this and gets its properties set, then it gets assigned to the main player.
+    private TableView<Song> playingFrom; //to know which table are the songs being played from
+    private String uriString; //this is also used in readMetadata()
+    private ArrayList<Song> currentPlaylist = new ArrayList<>(); //the current playlist. this is being constructed on every new songstart so it will play the playlist's songs or the library songs
     
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+       //creating the one and only instance of the libraries and getting them
+       //now we can get the libaries from everywhere using SongLibrary.getInstance();
        SongLibrary.createInstance();
        PlaylistLibrary.createInstance();
        libSong = SongLibrary.getInstance();
        libPl = PlaylistLibrary.getInstance();
        
-       setTableProperties();
+       setTableProperties(); //assign column properties to tables
        
        //-------Setting up Songlist
        songlist = FXCollections.observableArrayList(manager.getAll());
@@ -196,93 +200,65 @@ public class FXMLDocumentController implements Initializable
        tblAllPlaylists.setItems(playlistlist);
        
        slideVol.setValue(100);
-       //manager.getAll();
     }
     
-    private void readMetadata(String uriString)
-    {
-        //-----Reading Metadata--------
-        /**
-         * First it adds a listener to the media
-         * then it gets every single detail of
-         * the media file.
+    /**
+         * Getting metadata from a temporary mediaplayer
+         * by syncing threads of the app and the mediaplayer.
          * You can choose to get every data one by one,
          * using title, album, artist.. etc. 
          * OR using fullMetadata which gets everything.
          * fullMetadata has raw metadata, look out for that.
-         */
+         * 
+         * This is putting the newly opened song in the library. (Because we cannot get the metadata from anywhere else.)
+    **/
+    private void readMetadata(String uriString)
+    {
+        //-----Reading Metadata--------
+        
         MediaPlayer tempPlayer = new MediaPlayer(new Media(uriString));
         tempPlayer.setOnReady(new Runnable() {
 
-        @Override
-        public void run() {
-            currArtist =(String) tempPlayer.getMedia().getMetadata().get("artist");
-            currTitle =(String) tempPlayer.getMedia().getMetadata().get("title");
-            currAlbum =(String) tempPlayer.getMedia().getMetadata().get("album");
-            currGenre = (String) tempPlayer.getMedia().getMetadata().get("genre");
-            /*double tmpCurrMinToSec = Math.floor(player.getMedia().durationProperty().getValue().toMinutes() * 60 +); //Convert Floored minutes to seconds
-            double currDurationMinutes = Math.floor(player.getMedia().durationProperty().getValue().toMinutes()); 
-            double currDurationSeconds = Math.floor(player.getMedia().durationProperty().getValue().toSeconds()) - tmpCurrMinToSec;
-            String currDuration = currDurationMinutes + ":" + currDurationSeconds;*/
-            currFullMetadata =(String) tempPlayer.getMedia().getMetadata().toString();
-            String songTime = String.format("%d:%d",
-                    TimeUnit.MILLISECONDS.toMinutes((long) tempPlayer.getMedia().getDuration().toMillis()),
-                    TimeUnit.MILLISECONDS.toSeconds((long) tempPlayer.getMedia().getDuration().toMillis()) - TimeUnit.MINUTES.toSeconds(
-                    TimeUnit.MILLISECONDS.toMinutes((long)tempPlayer.getMedia().getDuration().toMillis())));
-            
-            
-            ol.add(currArtist);
-            ol.add(currTitle);
-            ol.add(currAlbum);
-            ol.add(currFullMetadata);
-            synchronized(obj){//this is required since mp.setOnReady creates a new thread and our loopp  in the main thread
-                try {
-                    obj.wait(10);
-                    //System.out.println(currArtist + "afterwait");
-                    libSong.addSong(new Song(uriString, currArtist, currTitle, currGenre, songTime));
-                    updateSongTable();
+            @Override
+            public void run() {
+                currArtist =(String) tempPlayer.getMedia().getMetadata().get("artist");
+                currTitle =(String) tempPlayer.getMedia().getMetadata().get("title");
+                currAlbum =(String) tempPlayer.getMedia().getMetadata().get("album");
+                currGenre = (String) tempPlayer.getMedia().getMetadata().get("genre");
+                currFullMetadata =(String) tempPlayer.getMedia().getMetadata().toString();
+                String songTime = String.format("%d:%d",
+                        TimeUnit.MILLISECONDS.toMinutes((long) tempPlayer.getMedia().getDuration().toMillis()),
+                        TimeUnit.MILLISECONDS.toSeconds((long) tempPlayer.getMedia().getDuration().toMillis()) - TimeUnit.MINUTES.toSeconds(
+                        TimeUnit.MILLISECONDS.toMinutes((long)tempPlayer.getMedia().getDuration().toMillis())));
+
+                ol.add(currArtist);
+                ol.add(currTitle);
+                ol.add(currAlbum);
+                ol.add(currFullMetadata);
+                synchronized(obj){//this is required since mp.setOnReady creates a new thread and our loopp  in the main thread
+                    try {
+                        obj.wait(10);
+                        libSong.addSong(new Song(uriString, currArtist, currTitle, currGenre, songTime));
+                        updateSongTable();
                     } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                    System.out.println("nem");
+                        Thread.currentThread().interrupt();
+                        System.out.println("InterruptedException in readmetadata.");
+                    }
+                    obj.notify();// the loop has to wait unitl we are able to get the media metadata thats why use .wait() and .notify() to synce the two threads(main thread and MediaPlayer thread)
                 }
-                obj.notify();// the loop has to wait unitl we are able to get the media metadata thats why use .wait() and .notify() to synce the two threads(main thread and MediaPlayer thread)
+
+                System.out.println("--------New Metadata info--------");
+                System.out.println(currArtist);
+                System.out.println(currTitle);
+                System.out.println(currAlbum);
+                System.out.println(currGenre);
+                System.out.println(currFullMetadata);
+                System.out.println("--------End of new metadata-------");
             }
-            
-            System.out.println("--------New Metadata info--------");
-            System.out.println(currArtist);
-            System.out.println(currTitle);
-            System.out.println(currAlbum);
-            System.out.println(currGenre);
-//            System.out.println(currDuration);
-            System.out.println(currFullMetadata);
-            System.out.println("--------End of new metadata-------");
-        }
-    });
-        /*
-        Media m = new Media(uriString);
-        Media media = new Media(uriString);
-        media.getMetadata().addListener((MapChangeListener<String, Object>) change -> 
-                {
-                    // code to process metadata attribute change.
-                    currTitle = (String) m.getMetadata().get("title");
-                    currAlbum = (String) m.getMetadata().get("album");
-                    currArtist = (String) m.getMetadata().get("artist");
-                    currFullMetadata = (String)m.getMetadata().toString();
-                    
-                    //Actually have no clue what this supposed to be.. 
-                    //Maybe for every mediafile in the folder ??
-                    //ObservableList<String> medialist = FXCollections.observableArrayList();
-                    //     medialist.addAll(medialist);
-                    //System.out.println(medialist);
-                    System.out.println(currTitle);
-                    System.out.println(currAlbum);
-                    System.out.println(currArtist);
-                    System.out.println(currFullMetadata);
-                    
-                                
-        });*/
+        });
     }
     
+    /** Opens a filechooser by pressing New button, then calls readMetadata() to put in the library. **/
     @FXML
     private void openFile(ActionEvent event)
     {
@@ -293,16 +269,15 @@ public class FXMLDocumentController implements Initializable
         fileChooser.setTitle("Open Music File");
 
         File files = fileChooser.showOpenDialog(stage);
-        uriString = files.toURI().toString();//(s + "\\sound1.mp3").toURI().toString();
+        uriString = files.toURI().toString();
         System.out.println(uriString);
-        //player = new MediaPlayer(new Media(uriString));
-        //player.play();
-        
+
         readMetadata(uriString);
-        //lib.addSong(new Song(uriString, currArtist, currTitle, "", "0"));
-        //updateSongTable();
     }
     
+    /** This should have been the searchbutton action...
+     * Not implemented yet.
+     **/
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException
     {
@@ -325,7 +300,9 @@ public class FXMLDocumentController implements Initializable
     }
 
     
-
+    /** This should open the NewSongPopup, but we didn't implement it
+     * because of saving problems.
+     **/
     private void openNewSong(ActionEvent event) throws IOException {
         /**
          * POPUPS
@@ -335,21 +312,20 @@ public class FXMLDocumentController implements Initializable
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/NewSongPopup.fxml"));
         Parent root = loader.load();
         
-        // Fetches controller from patient view
+        // Fetches controller from view
         NewSongPopupController controller = loader.getController();
-        
-        //controller.setPatient(patient);
-        
+                
         // Sets new stage as modal window
-        Stage stagePatientView = new Stage();
-        stagePatientView.setScene(new Scene(root));
+        Stage stageView = new Stage();
+        stageView.setScene(new Scene(root));
         
-        stagePatientView.initModality(Modality.WINDOW_MODAL);
-        stagePatientView.initOwner(primStage);
+        stageView.initModality(Modality.WINDOW_MODAL);
+        stageView.initOwner(primStage);
         
-        stagePatientView.show();
+        stageView.show();
     }
     
+    /** Opens EditSongPopup **/
     @FXML
     private void openEditSong(ActionEvent event) throws IOException
     {
@@ -361,18 +337,17 @@ public class FXMLDocumentController implements Initializable
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/EditSongPopup.fxml"));
         Parent root = loader.load();
         
-        // Fetches controller from patient view
+        // Fetches controller from view
         EditSongPopupController controller = loader.getController();
         controller.setController(this);
         
-        //controller.setPatient(patient);
         
         // Sets new stage as modal window
-        Stage stagePatientView = new Stage();
-        stagePatientView.setScene(new Scene(root));
+        Stage stageView = new Stage();
+        stageView.setScene(new Scene(root));
         
-        stagePatientView.initModality(Modality.WINDOW_MODAL);
-        stagePatientView.initOwner(primStage);
+        stageView.initModality(Modality.WINDOW_MODAL);
+        stageView.initOwner(primStage);
         
         //-------------------------
         Song selectedSong = tblAllSongs.getSelectionModel(
@@ -381,9 +356,10 @@ public class FXMLDocumentController implements Initializable
         
 
         controller.setSelected(selectedSong);
-        stagePatientView.show();
+        stageView.show();
     }
     
+    /** Opens DeleteSongPopup **/
     @FXML
     private void openDeleteSong(ActionEvent event) throws IOException {
         /**
@@ -394,23 +370,23 @@ public class FXMLDocumentController implements Initializable
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/DeleteSongPopup.fxml"));
         Parent root = loader.load();
         
-        // Fetches controller from patient view
+        // Fetches controller from view
         DeleteSongPopupController controller = loader.getController();
         controller.setSelected(tblAllSongs.getSelectionModel().getSelectedItem());
         controller.setController(this);
         
-        //controller.setPatient(patient);
         
         // Sets new stage as modal window
-        Stage stagePatientView = new Stage();
-        stagePatientView.setScene(new Scene(root));
+        Stage stageView = new Stage();
+        stageView.setScene(new Scene(root));
         
-        stagePatientView.initModality(Modality.WINDOW_MODAL);
-        stagePatientView.initOwner(primStage);
+        stageView.initModality(Modality.WINDOW_MODAL);
+        stageView.initOwner(primStage);
         
-        stagePatientView.show();
+        stageView.show();
     }
     
+    /** Opens EditPlaylistPopup **/
     @FXML
     private void openEditPlaylist(ActionEvent event) throws IOException {
         /**
@@ -421,24 +397,23 @@ public class FXMLDocumentController implements Initializable
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/EditPlaylistPopup.fxml"));
         Parent root = loader.load();
         
-        // Fetches controller from patient view
+        // Fetches controller from view
         EditPlaylistPopupController controller = loader.getController();
         
         controller.setSelected(tblAllPlaylists.getSelectionModel().getSelectedItem());
         controller.setController(this);
         
-        //controller.setPatient(patient);
-        
         // Sets new stage as modal window
-        Stage stagePatientView = new Stage();
-        stagePatientView.setScene(new Scene(root));
+        Stage stageView = new Stage();
+        stageView.setScene(new Scene(root));
         
-        stagePatientView.initModality(Modality.WINDOW_MODAL);
-        stagePatientView.initOwner(primStage);
+        stageView.initModality(Modality.WINDOW_MODAL);
+        stageView.initOwner(primStage);
         
-        stagePatientView.show();
+        stageView.show();
     }
     
+    /** Opens DeletePlaylistPopup **/
     @FXML
     private void openDeletePlaylist(ActionEvent event) throws IOException {
         /**
@@ -449,23 +424,22 @@ public class FXMLDocumentController implements Initializable
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/DeletePlaylistPopup.fxml"));
         Parent root = loader.load();
         
-        // Fetches controller from patient view
+        // Fetches controller from view
         DeletePlaylistPopupController controller = loader.getController();
         controller.setSelectedPlaylist(tblAllPlaylists.getSelectionModel().getSelectedItem());
         controller.setController(this);
         
-        //controller.setPatient(patient);
-        
         // Sets new stage as modal window
-        Stage stagePatientView = new Stage();
-        stagePatientView.setScene(new Scene(root));
+        Stage stageView = new Stage();
+        stageView.setScene(new Scene(root));
         
-        stagePatientView.initModality(Modality.WINDOW_MODAL);
-        stagePatientView.initOwner(primStage);
+        stageView.initModality(Modality.WINDOW_MODAL);
+        stageView.initOwner(primStage);
         
-        stagePatientView.show();
+        stageView.show();
     }
     
+    /** Opens newPlaylistPopup **/
     @FXML
     private void openNewPlaylist(ActionEvent event) throws IOException {
         /**
@@ -476,22 +450,21 @@ public class FXMLDocumentController implements Initializable
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/GUI/View/NewPlaylistPopup.fxml"));
         Parent root = loader.load();
         
-        // Fetches controller from patient view
+        // Fetches controller from view
         NewPlaylistPopupController controller = loader.getController();
         controller.setController(this);
         
-        //controller.setPatient(patient);
-        
         // Sets new stage as modal window
-        Stage stagePatientView = new Stage();
-        stagePatientView.setScene(new Scene(root));
+        Stage stageView = new Stage();
+        stageView.setScene(new Scene(root));
         
-        stagePatientView.initModality(Modality.WINDOW_MODAL);
-        stagePatientView.initOwner(primStage);
+        stageView.initModality(Modality.WINDOW_MODAL);
+        stageView.initOwner(primStage);
         
-        stagePatientView.show();
+        stageView.show();
     }
 
+    /** Moves song one up in the actual playlist **/
     @FXML
     private void moveSongUp(ActionEvent event) {
         if(!tblCurPlaylist.getSelectionModel().isEmpty())
@@ -512,6 +485,7 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /** Moves song one down in the actual playlist. **/
     @FXML
     private void moveSongDown(ActionEvent event) {
         if(!tblCurPlaylist.getSelectionModel().isEmpty())
@@ -532,6 +506,7 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /** Deletes selected song from actual playlist **/
     @FXML
     private void deleteSongFromPlaylist(ActionEvent event) {
         if(!tblCurPlaylist.getSelectionModel().isEmpty())
@@ -547,6 +522,7 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /** Adds selected song from library to actual playlist **/
     @FXML
     private void addSongToPlaylist(ActionEvent event) {
         if(!tblAllSongs.getSelectionModel().isEmpty() && !tblAllPlaylists.getSelectionModel().isEmpty())
@@ -562,6 +538,7 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /** Assigns all table column properties **/
     @FXML
     public void setTableProperties() {
         colAllSongsArtist.setCellValueFactory(new PropertyValueFactory("artist"));
@@ -577,12 +554,15 @@ public class FXMLDocumentController implements Initializable
         colCurPlaylistTime.setCellValueFactory(new PropertyValueFactory("time"));
     }
     
+    /**
+     * THIS IS THE ULTIMATE SOLUTION FOR OUR PROBLEMS
+     * CODING LEVEL OVER 9000
+     * 
+     * This is how it works and that's it
+     */
     @FXML
     public void updateSongTable() {
-        /**
-         * THIS IS THE ULTIMATE SOLUTION FOR OUR PROBLEMS
-         * CODING LEVEL OVER 9000
-         */
+
         songlist = FXCollections.observableArrayList(libSong.getSongList());
         manager.saveAll(songlist);
         
@@ -602,6 +582,12 @@ public class FXMLDocumentController implements Initializable
         manager.saveAll(songlist);
     }
     
+    /**
+     * THIS IS THE ULTIMATE SOLUTION FOR OUR PROBLEMS
+     * CODING LEVEL OVER 9000
+     * 
+     * This is how it works and that's it
+     */
     @FXML
     public void updatePlaylistTable()
     {
@@ -624,6 +610,9 @@ public class FXMLDocumentController implements Initializable
         }*/
     }
     
+    /**
+     * Binding duration counter to GUI. Thank you Jeppe!
+     */
     private void bindPlayerToLabel()
     {
         labelcount.textProperty().bind(
@@ -651,6 +640,9 @@ public class FXMLDocumentController implements Initializable
         
     }
     
+    /**
+     * Modified Jeppe's code to bind duration to the slider to move it.
+     */
     private void bindPlayerToSlider() {
         slideTime.valueProperty().bind(
             new ObjectBinding<Double>() {
@@ -664,6 +656,10 @@ public class FXMLDocumentController implements Initializable
             });
     }
     
+    /**
+     * seeks the player
+     * @param event 
+     */
     @FXML
     private void seekTime(MouseEvent event) {
         Duration seektime = Duration.millis(player.getMedia().getDuration().toMillis()*(slideTime.getValue()/100));
@@ -671,18 +667,20 @@ public class FXMLDocumentController implements Initializable
         bindPlayerToSlider();
     }
     
+    /**
+     * unbinds the slider when it's clicked so you can move it to seek
+     * @param event 
+     */
     @FXML
     private void unBindSlider(MouseEvent event) {
         slideTime.valueProperty().unbind();
     }
     
-    @FXML
-    public void fillPlaylistTable() {
-        tblAllPlaylists.setItems(playlistlist);
-        //manager.saveAll(playlistlist);
-    }
-    
-    
+    /**
+     * The main play() method.
+     * This is being called from the playbutton and also from doubleclick.
+     * This binds and assigns the GUI and writes nowPlaying to gui.
+     */
     private void play(Song toPlay) {
         nowPlaying = toPlay;
         player.play();
@@ -692,12 +690,17 @@ public class FXMLDocumentController implements Initializable
         bindPlayerToSlider();
     }
 
+    /**
+     * The playbutton's method. Basically same as the doubleclick.
+     * @param event 
+     */
     @FXML
     private void playMusic(ActionEvent event)
     {
         if(loadPlayer != null) {
             setPlayerProperties(loadPlayer);
         }
+        
         if(player == null) {
             player = loadPlayer;
             
@@ -705,21 +708,20 @@ public class FXMLDocumentController implements Initializable
             for(Song song : playingFrom.getItems()) {
                 currentPlaylist.add(song);
             }
-            int start = currentPlaylist.indexOf(playingFrom.getSelectionModel().getSelectedItem());
             
+            int start = currentPlaylist.indexOf(playingFrom.getSelectionModel().getSelectedItem());
             play(currentPlaylist.get(start));
         }
         
         if(player.getStatus().equals(READY)) {
             
             currentPlaylist = new ArrayList<>();
-            for(Song song : tblAllSongs.getItems()) {
+            for(Song song : playingFrom.getItems()) {
                 currentPlaylist.add(song);
             }
 
-            int start = currentPlaylist.indexOf(tblAllSongs.getSelectionModel().getSelectedItem());
+            int start = currentPlaylist.indexOf(playingFrom.getSelectionModel().getSelectedItem());
             play(currentPlaylist.get(start));
-            //play(playingFrom.getSelectionModel().getSelectedItem());
         } else if(player.getStatus().equals(PAUSED)) {
             player.play();
         } else if(player.getStatus().equals(PLAYING)) {
@@ -727,6 +729,14 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /**
+     * This method is checking the single and doubleclick on the Library's table.
+     * On selection, it gets the selected song ready to play. And it may clear the other neighboor table so we won't have two songs
+     * to play together.
+     * On doubleclick, it assigns loadPlayer to player and starts playing.
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     private void mousePressedOnTableView(MouseEvent event) throws IOException
     {
@@ -796,6 +806,10 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /**
+     * This opens the selected playlist's content in the middle tableview.
+     * @param event 
+     */
     @FXML
     private void mousePressedOnPlaylist(MouseEvent event) {
         if(event.isPrimaryButtonDown()) {
@@ -808,6 +822,11 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /**
+     * Basically the same as mousePressedOnTableView. Operates with the actual playlist's table (middle table).
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     private void mousePressedOnCurPlaylist(MouseEvent event) throws IOException
     {
@@ -825,7 +844,7 @@ public class FXMLDocumentController implements Initializable
                     {
                         if(currentPlaylist.indexOf(nowPlaying) != currentPlaylist.size() - 1)
                         {
-                            Song nextsong = (Song)currentPlaylist.get(currentPlaylist.indexOf(nowPlaying) + 1);
+                            Song nextsong = currentPlaylist.get(currentPlaylist.indexOf(nowPlaying) + 1);
                             loadPlayer = new MediaPlayer(new Media(nextsong.getPath()));
                             setPlayerProperties(loadPlayer);
                             player.stop();
@@ -874,12 +893,8 @@ public class FXMLDocumentController implements Initializable
             }
         }
     }
-    @FXML
-    public void printLib()
-    {
-        System.out.println(libSong.getSongList());
-    }
     
+    /** This will be used in search to set the radio button's group. **/
     private void setToggleGroupForRadioButtons() {
         ToggleGroup toggleGroup = new ToggleGroup();
         rbTitle.setToggleGroup(toggleGroup);
@@ -887,6 +902,10 @@ public class FXMLDocumentController implements Initializable
     }
     private ObservableList<String> filteredList = FXCollections.observableArrayList();
     
+    /**
+     * This will be used in search later.
+     * @param event 
+     */
     @FXML
     private void searchClick(ActionEvent event)
     {
@@ -898,11 +917,19 @@ public class FXMLDocumentController implements Initializable
     
     }
     
+    /**
+     * Sets the players volume to the slider's value when the slider is being dragged.
+     * @param event 
+     */
     @FXML
     private void volumeSlider(MouseEvent event) {
         player.setVolume(slideVol.getValue()/100);
     }
     
+    /**
+     * Mutes/unmutes the player and changes the image of the button.
+     * @param event 
+     */
     @FXML
     private void muteButtonAction(ActionEvent event) {
         Image mute = new Image("http://kivulallo.ddns.net/assignment/mute.png");
@@ -916,6 +943,10 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /**
+     * Sets the given MediaPlayer properties to change play/pause images and assign currently loaded song's duration to the label.
+     * @param toSet 
+     */
     private void setPlayerProperties(MediaPlayer toSet) {
         toSet.setOnPaused(new Runnable() {
             public void run() {
@@ -951,6 +982,10 @@ public class FXMLDocumentController implements Initializable
         });
     }
     
+    /**
+     * Jumps to next song in the current playlist (if is there any more)
+     * @param event 
+     */
     @FXML
     private void nextSong(ActionEvent event)
     {
@@ -970,6 +1005,10 @@ public class FXMLDocumentController implements Initializable
         }
     }
     
+    /**
+     * Jump back one song in the current playlist if is there any before.
+     * @param event 
+     */
     @FXML
     private void prevSong(ActionEvent event)
     {

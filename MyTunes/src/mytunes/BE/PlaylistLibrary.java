@@ -7,7 +7,8 @@ package mytunes.BE;
 import java.util.ArrayList;
 
 /**
- *
+ * Stores information about the PlaylistLibrary
+ * which contains every playlist.
  * @author Kristof
  */
 public class PlaylistLibrary {
